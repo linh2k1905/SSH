@@ -38,8 +38,33 @@ let handleGetAllUsers = async (req, res) => {
     })
 
 }
+let handleCreateNewUser = async (req, res) => {
+    let message = await userService.createNewUser(req.body);
 
+    return res.status(200).json({ message: message });
+}
+let handleDeleteUser = async (req, res) => {
+    if (!req.body.id) {
+        return res.status(200).json({
+            errorCode: 1,
+            messageCode: " User not found"
+        })
+
+    }
+    let message = await userService.deleteUser(req.body.id);
+    return res.status(200).json(message)
+}
+let handleEditUser = async (req, res) => {
+    let data = req.body;
+    let message = await userService.editUser(data);
+    return res.status(200).json(message)
+
+
+}
 module.exports = {
     handleLogin: handleLogin,
-    handleGetAllUsers: handleGetAllUsers
+    handleGetAllUsers: handleGetAllUsers,
+    handleCreateNewUser: handleCreateNewUser,
+    handleDeleteUser: handleDeleteUser,
+    handleEditUser: handleEditUser
 }
