@@ -1,6 +1,7 @@
 
 import db from '../models/index'
 import bcrypt from 'bcryptjs'
+import { raw } from 'body-parser';
 const salt = bcrypt.genSaltSync(10);
 let handleUserLogin = (email, password) => {
     return new Promise(async (resolve, reject) => {
@@ -15,7 +16,7 @@ let handleUserLogin = (email, password) => {
                     where: {
                         email: email,
                     },
-                    raw: true
+                    raw: false
                 });
                 if (user) {
                     let rlt = await bcrypt.compareSync(password, user.password);
@@ -53,8 +54,8 @@ let checkEmailUser = (mail) => {
             let user = await db.User.findOne({
                 where: {
                     email: mail
-                }
-
+                },
+                raw: false
             })
 
             if (user) {
@@ -90,7 +91,9 @@ let getAllUser = (id) => {
                     where: { id: id },
                     attributes: {
                         exclude: ['password']
-                    }
+                    },
+                    raw: false
+
                 })
             }
             resolve(users)
@@ -109,26 +112,29 @@ let createNewUser = (data) => {
             if (check) {
                 resolve({
                     errorCode: 1,
-                    messageCode: 'Email used. Please enter new email'
+                    messageCode: 'Email đã được sử dụng. Vui lòng nhập mail mới'
                 })
             }
-            let hashUserPasswordFromBcrypt = await hashUserPassword(data.password);
+            else {
+                let hashUserPasswordFromBcrypt = await hashUserPassword(data.password);
 
-            await db.User.create({
-                firstName: data.firstName,
-                lastName: data.lastName,
-                password: hashUserPasswordFromBcrypt,
-                email: data.email,
-                tel: data.tel,
-                address: data.address,
-                gender: data.gender === '1' ? true : false,
-                roleId: data.roleId,
+                await db.User.create({
+                    firstName: data.firstName,
+                    lastName: data.lastName,
+                    password: hashUserPasswordFromBcrypt,
+                    email: data.email,
+                    tel: data.tel,
+                    address: data.address,
+                    gender: data.gender === '1' ? true : false,
+                    roleId: data.roleId,
 
-            })
-            resolve({
-                errorCode: 0,
-                messageCode: 'Create  New User'
-            })
+                })
+                resolve({
+                    errorCode: 0,
+                    messageCode: 'Create  New User'
+                })
+            }
+
 
         } catch (error) {
             reject(error);
@@ -156,6 +162,7 @@ let deleteUser = async (id) => {
         try {
             let user = await db.User.findOne({
                 where: { id: id },
+                raw: false
 
             })
             if (!user) {
