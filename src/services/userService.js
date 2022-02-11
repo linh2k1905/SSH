@@ -2,6 +2,7 @@
 import db from '../models/index'
 import bcrypt from 'bcryptjs'
 import { raw } from 'body-parser';
+import { reject } from 'bcrypt/promises';
 const salt = bcrypt.genSaltSync(10);
 let handleUserLogin = (email, password) => {
     return new Promise(async (resolve, reject) => {
@@ -12,7 +13,7 @@ let handleUserLogin = (email, password) => {
             let userData = {};
             if (isExist) {
                 let user = await db.User.findOne({
-                    attributes: ['id', 'email', 'password'],
+                    attributes: ['id', 'email', 'password', 'firstName', 'lastName'],
                     where: {
                         email: email,
                     },
@@ -125,8 +126,9 @@ let createNewUser = (data) => {
                     email: data.email,
                     tel: data.tel,
                     address: data.address,
-                    gender: data.gender === '1' ? true : false,
                     roleId: data.roleId,
+                    image: data.image
+
 
                 })
                 resolve({
@@ -192,7 +194,7 @@ let deleteUser = async (id) => {
 let editUser = async (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            if (!data.id) {
+            if (!data.id || !data.roleId) {
                 resolve({
                     errorCode: 2,
                     messageCode: "Missing input"
@@ -207,6 +209,12 @@ let editUser = async (data) => {
                 user.address = data.address;
                 user.lastName = data.lastName;
                 user.firstName = data.firstName;
+                user.roleId = data.roleId;
+                user.tel = data.tel;
+                if (data.image) {
+                    user.image = data.image;
+                }
+
                 await user.save();
                 resolve({
                     errorCode: 0,
@@ -220,11 +228,36 @@ let editUser = async (data) => {
         }
     })
 }
+let getRoleUser = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let role = await db.Role.findAll({
+
+
+            });
+            console.log(role);
+            resolve({
+                errorCode: 0,
+                data: role
+            });
+
+
+        } catch (error) {
+            reject({
+                errorCode: 1,
+                messageCode: ' Khong tim thay vai tro'
+            })
+        }
+
+
+    })
+}
 module.exports = {
     handleUserLogin: handleUserLogin,
     getAllUser: getAllUser,
     createNewUser: createNewUser,
     deleteUser: deleteUser,
-    editUser: editUser
+    editUser: editUser,
+    getRoleUser: getRoleUser
 
 }

@@ -16,9 +16,13 @@ module.exports = (sequelize, DataTypes) => {
   HouseType.init({
 
     name: DataTypes.STRING,
+    nameVi: DataTypes.STRING,
+    image: DataTypes.STRING,
+
   }, {
     sequelize,
     modelName: 'HouseType',
-  });
+  },
+  );
   return HouseType;
 };

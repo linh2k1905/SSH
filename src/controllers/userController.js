@@ -64,10 +64,16 @@ let handleEditUser = async (req, res) => {
 
 
 }
+let handleGetRole = async (req, res) => {
+    let data = await userService.getRoleUser();
+    console.log('data', data);
+    return res.status(200).json(data);
+}
 module.exports = {
     handleLogin: handleLogin,
     handleGetAllUsers: handleGetAllUsers,
     handleCreateNewUser: handleCreateNewUser,
     handleDeleteUser: handleDeleteUser,
-    handleEditUser: handleEditUser
+    handleEditUser: handleEditUser,
+    handleGetRole: handleGetRole
 }
