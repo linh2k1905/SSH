@@ -252,12 +252,36 @@ let getRoleUser = () => {
 
     })
 }
+let getAllCity = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let city = await db.City.findAll({
+
+
+            });
+            resolve({
+                errorCode: 0,
+                data: city
+            });
+
+
+        } catch (error) {
+            reject({
+                errorCode: 1,
+                messageCode: ' Khong tim thay thanh pho'
+            })
+        }
+
+
+    })
+}
 module.exports = {
     handleUserLogin: handleUserLogin,
     getAllUser: getAllUser,
     createNewUser: createNewUser,
     deleteUser: deleteUser,
     editUser: editUser,
-    getRoleUser: getRoleUser
+    getRoleUser: getRoleUser,
+    getAllCity: getAllCity
 
 }

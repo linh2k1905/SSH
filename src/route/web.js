@@ -1,6 +1,7 @@
 import express, { Router } from "express";
 import homeController from '../controllers/homeController'
 import userController from '../controllers/userController'
+import ownerController from '../controllers/ownerController'
 let router = express.Router();
 
 let initWebRoute = (app) => {
@@ -21,6 +22,8 @@ let initWebRoute = (app) => {
     router.put('/api/edit-user', userController.handleEditUser);
     router.delete('/api/delete-user', userController.handleDeleteUser);
     router.get('/api/getRole', userController.handleGetRole);
+    router.get('/api/getCity', userController.handleGetCity);
+    router.get('/api/top-owner-home', ownerController.getTopOwnertoHome);
     return app.use(router)
 }
 module.exports = initWebRoute
