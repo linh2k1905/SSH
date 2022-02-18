@@ -34,6 +34,12 @@ module.exports = {
       image: {
         type: Sequelize.STRING
       },
+      lang: {
+        type: Sequelize.STRING
+      },
+      lat: {
+        type: Sequelize.STRING
+      },
 
       createdAt: {
         allowNull: false,

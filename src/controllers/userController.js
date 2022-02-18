@@ -12,7 +12,6 @@ let handleLogin = async (req, res) => {
         })
     }
     let userData = await userService.handleUserLogin(email, password)
-    console.log(userData)
     return res.status(200).json({
         error: userData.errorCode,
         messageCode: userData.messageCode,
@@ -46,6 +45,7 @@ let handleCreateNewUser = async (req, res) => {
         messageCode: message.messageCode
     });
 }
+
 let handleDeleteUser = async (req, res) => {
     if (!req.body.id) {
         return res.status(200).json({
@@ -66,13 +66,24 @@ let handleEditUser = async (req, res) => {
 }
 let handleGetRole = async (req, res) => {
     let data = await userService.getRoleUser();
-    console.log('data', data);
     return res.status(200).json(data);
 }
 let handleGetCity = async (req, res) => {
     let data = await userService.getAllCity();
-    console.log('data', data);
     return res.status(200).json(data);
+}
+let handleGetTypeHouse = async (req, res) => {
+    let data = await userService.getAllTypeHouse();
+
+    return res.status(200).json(data);
+}
+let handleCreateNewPost = async (req, res) => {
+    let message = await userService.createNewPost(req.body);
+
+    return res.status(200).json({
+        errorCode: message.errorCode,
+        messageCode: message.messageCode
+    });
 }
 module.exports = {
     handleLogin: handleLogin,
@@ -81,5 +92,7 @@ module.exports = {
     handleDeleteUser: handleDeleteUser,
     handleEditUser: handleEditUser,
     handleGetRole: handleGetRole,
-    handleGetCity: handleGetCity
+    handleGetCity: handleGetCity,
+    handleGetTypeHouse: handleGetTypeHouse,
+    handleCreateNewPost: handleCreateNewPost
 }

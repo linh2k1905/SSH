@@ -10,7 +10,9 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      House.belongsTo(models.User, { foreignKey: 'idUser' }),
+        House.belongsTo(models.City, { foreignKey: 'idCity' }),
+        House.belongsTo(models.HouseType, { foreignKey: 'idTypeHouse' })
     }
   };
   House.init({
@@ -19,11 +21,14 @@ module.exports = (sequelize, DataTypes) => {
     idUser: DataTypes.INTEGER,
     address: DataTypes.STRING,
     idCity: DataTypes.INTEGER,
+    idTypeHouse: DataTypes.INTEGER,
     price: DataTypes.FLOAT,
     area: DataTypes.INTEGER,
     descriptionVi: DataTypes.TEXT,
     descriptionEn: DataTypes.TEXT,
-    image: DataTypes.STRING
+    image: DataTypes.STRING,
+    lang: DataTypes.STRING,
+    lat: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'House',

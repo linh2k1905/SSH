@@ -2,6 +2,7 @@ import express, { Router } from "express";
 import homeController from '../controllers/homeController'
 import userController from '../controllers/userController'
 import ownerController from '../controllers/ownerController'
+import houseController from "../controllers/houseController"
 let router = express.Router();
 
 let initWebRoute = (app) => {
@@ -19,11 +20,14 @@ let initWebRoute = (app) => {
     router.post('/api/login', userController.handleLogin);
     router.get('/api/get-all-users', userController.handleGetAllUsers);
     router.post('/api/create-new-user', userController.handleCreateNewUser);
+    router.post('/api/create-new-post', userController.handleCreateNewPost);
     router.put('/api/edit-user', userController.handleEditUser);
     router.delete('/api/delete-user', userController.handleDeleteUser);
     router.get('/api/getRole', userController.handleGetRole);
     router.get('/api/getCity', userController.handleGetCity);
+    router.get('/api/getTypeHouse', userController.handleGetTypeHouse);
     router.get('/api/top-owner-home', ownerController.getTopOwnertoHome);
+    router.get('/api/get-all-house', houseController.getListLatestHouse);
     return app.use(router)
 }
 module.exports = initWebRoute

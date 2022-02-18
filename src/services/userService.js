@@ -145,6 +145,40 @@ let createNewUser = (data) => {
 
 
 }
+let createNewPost = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+
+            await db.House.create({
+                name: data.name,
+                idUser: data.userId,
+                idCity: data.cityId,
+                idTypeHouse: data.typeHouseId,
+                price: data.price,
+                address: data.address,
+                image: data.image,
+                area: data.area,
+                lat: data.lat,
+                lang: data.lang,
+                descriptionEn: data.descEn,
+                descriptionVi: data.descVi
+
+
+            })
+            resolve({
+                errorCode: 0,
+                messageCode: 'Create  New Post'
+            })
+
+
+
+        } catch (error) {
+            reject(error);
+        }
+    })
+
+
+}
 let hashUserPassword = (password) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -235,7 +269,6 @@ let getRoleUser = () => {
 
 
             });
-            console.log(role);
             resolve({
                 errorCode: 0,
                 data: role
@@ -275,6 +308,29 @@ let getAllCity = () => {
 
     })
 }
+let getAllTypeHouse = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let typeHouse = await db.HouseType.findAll({
+
+
+            });
+            resolve({
+                errorCode: 0,
+                data: typeHouse
+            });
+
+
+        } catch (error) {
+            reject({
+                errorCode: 1,
+                messageCode: ' Khong tim thay loai nha'
+            })
+        }
+
+
+    })
+}
 module.exports = {
     handleUserLogin: handleUserLogin,
     getAllUser: getAllUser,
@@ -282,6 +338,8 @@ module.exports = {
     deleteUser: deleteUser,
     editUser: editUser,
     getRoleUser: getRoleUser,
-    getAllCity: getAllCity
+    getAllCity: getAllCity,
+    getAllTypeHouse: getAllTypeHouse,
+    createNewPost: createNewPost
 
 }
