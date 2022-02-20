@@ -16,6 +16,14 @@ let getListLatestHouse = async (req, res) => {
 
     }
 }
+let handleEditHouse = async (req, res) => {
+    let data = req.body;
+    let message = await houseSerVice.editHouse(data);
+    return res.status(200).json(message)
+
+
+}
 module.exports = {
-    getListLatestHouse: getListLatestHouse
+    getListLatestHouse: getListLatestHouse,
+    handleEditHouse: handleEditHouse
 }

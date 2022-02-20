@@ -28,6 +28,7 @@ let initWebRoute = (app) => {
     router.get('/api/getTypeHouse', userController.handleGetTypeHouse);
     router.get('/api/top-owner-home', ownerController.getTopOwnertoHome);
     router.get('/api/get-all-house', houseController.getListLatestHouse);
+    router.put('/api/edit-house-by-id', houseController.handleEditHouse);
     return app.use(router)
 }
 module.exports = initWebRoute
