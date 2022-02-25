@@ -11,7 +11,7 @@ let getLastestHome = () => {
                 include: [
                     { model: db.HouseType },
                     { model: db.City },
-                    { model: db.User },
+                    { model: db.User, attributes: ['firstName', 'lastName', 'address', 'tel', 'image'] },
 
                 ],
                 raw: true,
@@ -79,8 +79,84 @@ let editHouse = async (data) => {
         }
     })
 }
+let getDetailHouse = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let house = await db.House.findOne({
+                where: { id: id },
+
+                include: [
+                    {
+                        model: db.HouseType,
+
+                    },
+                    { model: db.City },
+                    { model: db.User, as: 'User', attributes: ['firstName', 'lastName', 'address', 'tel', 'image'] },
+
+                ],
+                raw: true,
+                nest: true
+
+
+
+            });
+            if (house && house.image)
+                house.image = new Buffer(house.image, 'base64').toString('binary');
+
+
+            resolve({
+                errorCode: 0,
+                data: house
+            });
+
+
+        } catch (error) {
+            reject({
+                errorCode: 1,
+                messageCode: ' Loi' + error
+            })
+        }
+
+
+    })
+}
+let deleteHouse = async (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let house = await db.House.findOne({
+                where: { id: id },
+                raw: false
+
+            })
+            if (!house) {
+                resolve({
+                    errorCode: 2,
+                    messageCode: 'Post not found'
+                })
+            }
+
+            await db.House.destroy({
+                where: { id: id }
+            });
+            resolve({
+                errorCode: 0,
+                messageCode: 'The post is deleted'
+            })
+        }
+
+
+        catch (error) {
+            reject(error)
+
+        }
+    }
+    )
+}
+
 module.exports = {
 
     getLastestHome: getLastestHome,
-    editHouse: editHouse
+    editHouse: editHouse,
+    getDetailHouse: getDetailHouse,
+    deleteHouse: deleteHouse
 }

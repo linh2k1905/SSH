@@ -28,7 +28,12 @@ let initWebRoute = (app) => {
     router.get('/api/getTypeHouse', userController.handleGetTypeHouse);
     router.get('/api/top-owner-home', ownerController.getTopOwnertoHome);
     router.get('/api/get-all-house', houseController.getListLatestHouse);
+    router.get('/api/detail-house-by-id', houseController.getDetailHouseById);
     router.put('/api/edit-house-by-id', houseController.handleEditHouse);
+    router.delete('/api/delete-house-by-id', houseController.handleDeleteHouse);
+    router.post('/api/create-new-city', userController.handleCreateNewCity);
+    router.put('/api/edit-city-by-id', userController.handleEditCity);
+    router.delete('/api/delete-city', userController.handleDeleteCity);
     return app.use(router)
 }
 module.exports = initWebRoute

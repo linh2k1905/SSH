@@ -73,6 +73,30 @@ let checkEmailUser = (mail) => {
     })
 
 }
+let checkCity = (name) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let city = await db.City.findOne({
+                where: {
+                    name: name
+                },
+                raw: false
+            })
+
+            if (city) {
+                resolve(true);
+            }
+            else {
+
+                resolve(false);
+            }
+
+        } catch (error) {
+            reject(error);
+        }
+    })
+
+}
 
 let getAllUser = (id) => {
 
@@ -134,6 +158,37 @@ let createNewUser = (data) => {
                 resolve({
                     errorCode: 0,
                     messageCode: 'Create  New User'
+                })
+            }
+
+
+        } catch (error) {
+            reject(error);
+        }
+    })
+
+
+}
+let createNewCity = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let check = await checkCity(data.name)
+            if (check) {
+                resolve({
+                    errorCode: 1,
+                    messageCode: 'Thành phố đã tồn tại . Vui lòng nhập thành phố mới'
+                })
+            }
+            else {
+
+
+                await db.City.create({
+                    name: data.name
+
+                })
+                resolve({
+                    errorCode: 0,
+                    messageCode: 'Create  New City'
                 })
             }
 
@@ -331,6 +386,70 @@ let getAllTypeHouse = () => {
 
     })
 }
+
+let editCity = async (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!data.id) {
+                resolve({
+                    errorCode: 2,
+                    messageCode: "Missing input"
+                })
+            }
+            let city = await db.City.findOne({
+                where: { id: data.id },
+                raw: false
+
+            })
+            if (city) {
+
+                city.name = data.name;
+
+                await city.save();
+                resolve({
+                    errorCode: 0,
+                    messageCode: 'Update successfully'
+                })
+
+
+            }
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+let deleteCity = async (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let city = await db.City.findOne({
+                where: { id: id },
+                raw: false
+
+            })
+            if (!city) {
+                resolve({
+                    errorCode: 2,
+                    messageCode: 'City not found'
+                })
+            }
+
+            await db.City.destroy({
+                where: { id: id }
+            });
+            resolve({
+                errorCode: 0,
+                messageCode: 'The city is deleted'
+            })
+        }
+
+
+        catch (error) {
+            reject(error)
+
+        }
+    }
+    )
+}
 module.exports = {
     handleUserLogin: handleUserLogin,
     getAllUser: getAllUser,
@@ -340,6 +459,10 @@ module.exports = {
     getRoleUser: getRoleUser,
     getAllCity: getAllCity,
     getAllTypeHouse: getAllTypeHouse,
-    createNewPost: createNewPost
+    createNewPost: createNewPost,
+    createNewCity: createNewCity,
+    checkCity: checkCity,
+    editCity: editCity,
+    deleteCity: deleteCity
 
 }

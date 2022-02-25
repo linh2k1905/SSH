@@ -85,6 +85,32 @@ let handleCreateNewPost = async (req, res) => {
         messageCode: message.messageCode
     });
 }
+let handleCreateNewCity = async (req, res) => {
+    let message = await userService.createNewCity(req.body);
+
+    return res.status(200).json({
+        errorCode: message.errorCode,
+        messageCode: message.messageCode
+    });
+}
+let handleEditCity = async (req, res) => {
+    let data = req.body;
+    let message = await userService.editCity(data);
+    return res.status(200).json(message)
+
+
+}
+let handleDeleteCity = async (req, res) => {
+    if (!req.body.id) {
+        return res.status(200).json({
+            errorCode: 1,
+            messageCode: " City not found"
+        })
+
+    }
+    let message = await userService.deleteCity(req.body.id);
+    return res.status(200).json(message)
+}
 module.exports = {
     handleLogin: handleLogin,
     handleGetAllUsers: handleGetAllUsers,
@@ -94,5 +120,8 @@ module.exports = {
     handleGetRole: handleGetRole,
     handleGetCity: handleGetCity,
     handleGetTypeHouse: handleGetTypeHouse,
-    handleCreateNewPost: handleCreateNewPost
+    handleCreateNewPost: handleCreateNewPost,
+    handleCreateNewCity: handleCreateNewCity,
+    handleEditCity: handleEditCity,
+    handleDeleteCity: handleDeleteCity
 }
