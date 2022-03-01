@@ -12,7 +12,8 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       House.belongsTo(models.User, { foreignKey: 'idUser' }),
         House.belongsTo(models.City, { foreignKey: 'idCity' }),
-        House.belongsTo(models.HouseType, { foreignKey: 'idTypeHouse' })
+        House.belongsTo(models.HouseType, { foreignKey: 'idTypeHouse' }),
+        House.hasOne(models.Comment, { foreignKey: 'houseId' })
     }
   };
   House.init({

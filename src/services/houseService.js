@@ -5,6 +5,7 @@ let getLastestHome = () => {
             let users = await db.House.findAll({
 
                 order: [['createdAt', 'ASC']],
+                limit: 5,
                 attributes: {
                     exclude: ['password']
                 },
@@ -15,7 +16,46 @@ let getLastestHome = () => {
 
                 ],
                 raw: true,
-                nest: true
+                nest: true,
+
+
+
+
+            });
+            resolve({
+                errorCode: 0,
+                data: users
+            });
+
+
+        } catch (error) {
+            reject({
+                errorCode: 1,
+                messageCode: ' Loi' + error
+            })
+        }
+
+
+    })
+}
+let getAllHome = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let users = await db.House.findAll({
+
+                order: [['createdAt', 'ASC']],
+                attributes: {
+                    exclude: ['password']
+                },
+                include: [
+                    { model: db.HouseType },
+                    { model: db.City },
+                    { model: db.User, attributes: ['firstName', 'lastName', 'address', 'tel', 'image'] },
+
+                ],
+                raw: true,
+                nest: true,
+
 
 
 
@@ -51,29 +91,26 @@ let editHouse = async (data) => {
                 raw: false
 
             })
-            if (house) {
-                house.name = data.name;
-                house.idCity = data.idCity;
-                house.idTypeHouse = data.idTypeHouse;
-                house.idUser = data.idUser;
-                house.price = data.price;
-                house.area = data.area;
-                house.descriptionVi = data.descriptionVi;
-                house.descriptionEn = data.descriptionEn;
-                house.lang = data.lang;
-                house.lat = data.lat;
-                if (house.image) {
-                    house.image = data.image;
-                }
-
-                await house.save();
-                resolve({
-                    errorCode: 0,
-                    messageCode: 'Update successfully'
-                })
-
+            if (house && house.id) {
+                console.log(house);
+                house.name = data.name
+                house.price = data.price
+                house.address = data.address
+                house.area = data.area
+                house.lat = data.lat
+                house.lang = data.lang
+                house.descriptionEn = data.descEn
+                house.descriptionVi = data.descVi
 
             }
+            await house.save();
+            resolve({
+                errorCode: 0,
+                messageCode: 'Update successfully'
+            })
+
+
+
         } catch (e) {
             reject(e)
         }
@@ -101,7 +138,7 @@ let getDetailHouse = (id) => {
 
             });
             if (house && house.image)
-                house.image = new Buffer(house.image, 'base64').toString('binary');
+                house.image = Buffer.from(house.image, 'base64').toString('binary');
 
 
             resolve({
@@ -158,5 +195,6 @@ module.exports = {
     getLastestHome: getLastestHome,
     editHouse: editHouse,
     getDetailHouse: getDetailHouse,
-    deleteHouse: deleteHouse
+    deleteHouse: deleteHouse,
+    getAllHome: getAllHome
 }

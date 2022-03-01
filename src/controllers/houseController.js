@@ -16,6 +16,23 @@ let getListLatestHouse = async (req, res) => {
 
     }
 }
+let getListHouse = async (req, res) => {
+
+
+
+    try {
+        let response = await houseSerVice.getAllHome();
+        return res.status(200).json(response);
+    } catch (error) {
+        console.log(error);
+        return res.status(200).json({
+            errorCode: -1,
+            message: 'Error from Server!!!'
+
+        })
+
+    }
+}
 let handleEditHouse = async (req, res) => {
     let data = req.body;
     let message = await houseSerVice.editHouse(data);
@@ -45,5 +62,6 @@ module.exports = {
     getListLatestHouse: getListLatestHouse,
     handleEditHouse: handleEditHouse,
     getDetailHouseById: getDetailHouseById,
-    handleDeleteHouse: handleDeleteHouse
+    handleDeleteHouse: handleDeleteHouse,
+    getListHouse: getListHouse
 }

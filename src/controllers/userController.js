@@ -111,6 +111,14 @@ let handleDeleteCity = async (req, res) => {
     let message = await userService.deleteCity(req.body.id);
     return res.status(200).json(message)
 }
+let handleCreateNewComment = async (req, res) => {
+    let message = await userService.handleCreateNewComment(req.body);
+
+    return res.status(200).json({
+        errorCode: message.errorCode,
+        messageCode: message.messageCode
+    });
+}
 module.exports = {
     handleLogin: handleLogin,
     handleGetAllUsers: handleGetAllUsers,
@@ -123,5 +131,6 @@ module.exports = {
     handleCreateNewPost: handleCreateNewPost,
     handleCreateNewCity: handleCreateNewCity,
     handleEditCity: handleEditCity,
-    handleDeleteCity: handleDeleteCity
+    handleDeleteCity: handleDeleteCity,
+    handleCreateNewComment: handleCreateNewComment
 }

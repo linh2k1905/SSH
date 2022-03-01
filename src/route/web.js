@@ -27,13 +27,16 @@ let initWebRoute = (app) => {
     router.get('/api/getCity', userController.handleGetCity);
     router.get('/api/getTypeHouse', userController.handleGetTypeHouse);
     router.get('/api/top-owner-home', ownerController.getTopOwnertoHome);
+
     router.get('/api/get-all-house', houseController.getListLatestHouse);
+    router.get('/api/get-all-home', houseController.getListHouse);
     router.get('/api/detail-house-by-id', houseController.getDetailHouseById);
     router.put('/api/edit-house-by-id', houseController.handleEditHouse);
     router.delete('/api/delete-house-by-id', houseController.handleDeleteHouse);
     router.post('/api/create-new-city', userController.handleCreateNewCity);
     router.put('/api/edit-city-by-id', userController.handleEditCity);
     router.delete('/api/delete-city', userController.handleDeleteCity);
+    router.post('/api/create-new-comment', userController.handleCreateNewComment);
     return app.use(router)
 }
 module.exports = initWebRoute

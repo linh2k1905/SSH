@@ -450,6 +450,32 @@ let deleteCity = async (id) => {
     }
     )
 }
+let handleCreateNewComment = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+
+            await db.Comment.create({
+                userId: data.userId,
+                houseId: data.houseId,
+                content: data.content,
+
+
+
+            })
+            resolve({
+                errorCode: 0,
+                messageCode: 'Đã tải lên'
+            })
+
+
+
+        } catch (error) {
+            reject(error);
+        }
+    })
+
+
+}
 module.exports = {
     handleUserLogin: handleUserLogin,
     getAllUser: getAllUser,
@@ -463,6 +489,7 @@ module.exports = {
     createNewCity: createNewCity,
     checkCity: checkCity,
     editCity: editCity,
-    deleteCity: deleteCity
+    deleteCity: deleteCity,
+    handleCreateNewComment: handleCreateNewComment
 
 }
