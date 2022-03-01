@@ -37,6 +37,8 @@ let initWebRoute = (app) => {
     router.put('/api/edit-city-by-id', userController.handleEditCity);
     router.delete('/api/delete-city', userController.handleDeleteCity);
     router.post('/api/create-new-comment', userController.handleCreateNewComment);
+    router.put('/api/edit-comment-by-id', userController.handleEditComment);
+    router.delete('/api/delete-comment', userController.handleDeleteComment);
     return app.use(router)
 }
 module.exports = initWebRoute

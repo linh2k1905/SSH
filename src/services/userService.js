@@ -476,6 +476,72 @@ let handleCreateNewComment = (data) => {
 
 
 }
+
+let editComment = async (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!data.id) {
+                resolve({
+                    errorCode: 2,
+                    messageCode: "Missing input"
+                })
+            }
+            let comment = await db.Comment.findOne({
+                where: { id: data.id },
+                raw: false
+
+            })
+            if (comment) {
+
+                comment.content = data.content;
+                comment.userId = data.userId;
+                comment.houseId = data.houseId;
+
+                await comment.save();
+                resolve({
+                    errorCode: 0,
+                    messageCode: 'Update successfully'
+                })
+
+
+            }
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+let handleDeleteComment = async (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let comment = await db.Comment.findOne({
+                where: { id: id },
+                raw: false
+
+            })
+            if (!comment) {
+                resolve({
+                    errorCode: 2,
+                    messageCode: 'Comment not found'
+                })
+            }
+
+            await db.Comment.destroy({
+                where: { id: id }
+            });
+            resolve({
+                errorCode: 0,
+                messageCode: 'The comment is deleted'
+            })
+        }
+
+
+        catch (error) {
+            reject(error)
+
+        }
+    }
+    )
+}
 module.exports = {
     handleUserLogin: handleUserLogin,
     getAllUser: getAllUser,
@@ -490,6 +556,8 @@ module.exports = {
     checkCity: checkCity,
     editCity: editCity,
     deleteCity: deleteCity,
-    handleCreateNewComment: handleCreateNewComment
+    handleCreateNewComment: handleCreateNewComment,
+    editComment: editComment,
+    handleDeleteComment: handleDeleteComment
 
 }

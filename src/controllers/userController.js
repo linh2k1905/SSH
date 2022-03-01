@@ -97,8 +97,6 @@ let handleEditCity = async (req, res) => {
     let data = req.body;
     let message = await userService.editCity(data);
     return res.status(200).json(message)
-
-
 }
 let handleDeleteCity = async (req, res) => {
     if (!req.body.id) {
@@ -119,6 +117,22 @@ let handleCreateNewComment = async (req, res) => {
         messageCode: message.messageCode
     });
 }
+let handleEditComment = async (req, res) => {
+    let data = req.body;
+    let message = await userService.editComment(data);
+    return res.status(200).json(message)
+}
+let handleDeleteComment = async (req, res) => {
+    if (!req.body.id) {
+        return res.status(200).json({
+            errorCode: 1,
+            messageCode: " Comment not found"
+        })
+
+    }
+    let message = await userService.handleDeleteComment(req.body.id);
+    return res.status(200).json(message)
+}
 module.exports = {
     handleLogin: handleLogin,
     handleGetAllUsers: handleGetAllUsers,
@@ -132,5 +146,7 @@ module.exports = {
     handleCreateNewCity: handleCreateNewCity,
     handleEditCity: handleEditCity,
     handleDeleteCity: handleDeleteCity,
-    handleCreateNewComment: handleCreateNewComment
+    handleCreateNewComment: handleCreateNewComment,
+    handleEditComment: handleEditComment,
+    handleDeleteComment: handleDeleteComment
 }

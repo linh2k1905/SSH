@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       House.belongsTo(models.User, { foreignKey: 'idUser' }),
         House.belongsTo(models.City, { foreignKey: 'idCity' }),
         House.belongsTo(models.HouseType, { foreignKey: 'idTypeHouse' }),
-        House.hasOne(models.Comment, { foreignKey: 'houseId' })
+        House.hasMany(models.Comment, { foreignKey: 'houseId' })
     }
   };
   House.init({
