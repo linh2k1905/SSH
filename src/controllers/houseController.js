@@ -58,10 +58,48 @@ let handleDeleteHouse = async (req, res) => {
     let message = await houseSerVice.deleteHouse(req.body.id);
     return res.status(200).json(message)
 }
+let getFilterHouse = async (req, res) => {
+
+
+
+    try {
+        let data = req.body;
+        let response = await houseSerVice.getFilterHouse(data);
+        return res.status(200).json(response);
+    } catch (error) {
+        console.log(error);
+        return res.status(200).json({
+            errorCode: -1,
+            message: 'Error from Server!!!'
+
+        })
+
+    }
+}
+let getFilterHouseFromHome = async (req, res) => {
+
+
+
+    try {
+        let data = req.body;
+        let response = await houseSerVice.getFilterHouseFromHome(data);
+        return res.status(200).json(response);
+    } catch (error) {
+        console.log(error);
+        return res.status(200).json({
+            errorCode: -1,
+            message: 'Error from Server!!!'
+
+        })
+
+    }
+}
 module.exports = {
     getListLatestHouse: getListLatestHouse,
     handleEditHouse: handleEditHouse,
     getDetailHouseById: getDetailHouseById,
     handleDeleteHouse: handleDeleteHouse,
-    getListHouse: getListHouse
+    getListHouse: getListHouse,
+    getFilterHouse: getFilterHouse,
+    getFilterHouseFromHome: getFilterHouseFromHome
 }

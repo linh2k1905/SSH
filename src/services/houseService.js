@@ -1,4 +1,5 @@
 import db from '../models/index'
+const { Op } = require('@sequelize/core');
 let getLastestHome = () => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -189,12 +190,115 @@ let deleteHouse = async (id) => {
     }
     )
 }
+let getFilterHouse = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let house = await db.House.findAll({
+                where: {
+                    idUser: data.idUser,
+                    idCity: data.idCity,
+                    idTypeHouse: data.idTypeHouse
+                },
 
+                include: [
+                    {
+                        model: db.HouseType,
+
+                    },
+                    { model: db.City },
+                    { model: db.User, as: 'User', attributes: ['firstName', 'lastName', 'address', 'tel', 'image'] },
+
+                ],
+                raw: true,
+                nest: true
+
+
+
+            });
+            if (house && house.image)
+                house.image = Buffer.from(house.image, 'base64').toString('binary');
+
+
+            resolve({
+                errorCode: 0,
+                data: house
+            });
+
+
+        } catch (error) {
+            reject({
+                errorCode: 1,
+                messageCode: ' Loi' + error
+            })
+        }
+
+
+    })
+}
+
+let getFilterHouseFromHome = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let house = await db.House.findAll({
+                where: {
+                    idCity: data.idCity,
+                    idTypeHouse: data.idTypeHouse,
+                    price: {
+
+                        [Op.lte]: data.price,
+
+                    },
+                    area: {
+
+                        [Op.gte]: data.area,
+
+                    },
+
+
+                },
+
+                include: [
+                    {
+                        model: db.HouseType,
+
+                    },
+                    { model: db.City },
+                    { model: db.User, as: 'User', attributes: ['firstName', 'lastName', 'address', 'tel', 'image'] },
+
+                ],
+                raw: true,
+                nest: true
+
+
+
+            });
+            if (house && house.image)
+                house.image = Buffer.from(house.image, 'base64').toString('binary');
+
+
+            resolve({
+                errorCode: 0,
+                data: house
+            });
+
+
+        } catch (error) {
+            reject({
+                errorCode: 1,
+                messageCode: ' Loi' + error
+            })
+        }
+
+
+    })
+}
 module.exports = {
 
     getLastestHome: getLastestHome,
     editHouse: editHouse,
     getDetailHouse: getDetailHouse,
     deleteHouse: deleteHouse,
-    getAllHome: getAllHome
+    getAllHome: getAllHome,
+    getFilterHouse: getFilterHouse,
+    getFilterHouseFromHome: getFilterHouseFromHome
 }

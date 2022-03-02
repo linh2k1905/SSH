@@ -39,6 +39,8 @@ let initWebRoute = (app) => {
     router.post('/api/create-new-comment', userController.handleCreateNewComment);
     router.put('/api/edit-comment-by-id', userController.handleEditComment);
     router.delete('/api/delete-comment', userController.handleDeleteComment);
+    router.get('/api/get-filter-house', houseController.getFilterHouse);
+    router.get('/api/get-filter-house-from-home', houseController.getFilterHouseFromHome);
     return app.use(router)
 }
 module.exports = initWebRoute
