@@ -41,6 +41,7 @@ let initWebRoute = (app) => {
     router.delete('/api/delete-comment', userController.handleDeleteComment);
     router.get('/api/get-filter-house', houseController.getFilterHouse);
     router.get('/api/get-filter-house-from-home', houseController.getFilterHouseFromHome);
+    router.post('/api/create-bulk-schedule', ownerController.createBulkSchedule);
     return app.use(router)
 }
 module.exports = initWebRoute
