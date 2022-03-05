@@ -48,7 +48,6 @@ let createBulkSchedule = (data) => {
             }
             else {
                 let schedule = data.arrTime;
-                console.log(schedule);
                 let existing = await db.Schedule.findAll({
                     where: {
                         idOwner: data.idOwner,
@@ -57,15 +56,8 @@ let createBulkSchedule = (data) => {
                     attributes: ['date', 'time', 'idOwner'],
                     raw: true
                 })
-                if (existing && existing.length > 0) {
-                    existing = existing.map(item => {
-                        item.date = new Date(item.date).getTime();
-                        return item;
-                    })
-                }
-
                 let toCreate = _.differenceWith(schedule, existing, (a, b) => {
-                    return a.time === b.time && a.date === b.date
+                    return a.time === b.time && a.date === b.date && a.idOwner === b.idOwner
                 });
                 if (toCreate && toCreate.length > 0) {
                     await db.Schedule.bulkCreate(toCreate);
@@ -88,8 +80,48 @@ let createBulkSchedule = (data) => {
 
 
 }
+
+let getScheduleOwner = (id, date) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+
+            if (!id || !date) {
+                resolve({
+                    errorMessage: "Missing parameters",
+                    errorCode: 0
+
+                })
+            }
+            let schedules = await db.Schedule.findAll({
+
+                where: {
+                    idOwner: id,
+                    date: date
+
+                },
+
+
+
+            });
+            resolve({
+                errorCode: 0,
+                data: schedules
+            });
+
+
+        } catch (error) {
+            reject({
+                errorCode: 1,
+                messageCode: ' Loi' + error
+            })
+        }
+
+
+    })
+}
 module.exports = {
 
     getTopOwnertoHome: getTopOwnertoHome,
-    createBulkSchedule: createBulkSchedule
+    createBulkSchedule: createBulkSchedule,
+    getScheduleOwner: getScheduleOwner
 }

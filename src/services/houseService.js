@@ -129,7 +129,7 @@ let getDetailHouse = (id) => {
 
                     },
                     { model: db.City, attributes: ['name'] },
-                    { model: db.User, as: 'User', attributes: ['firstName', 'lastName', 'address', 'tel', 'image'] },
+                    { model: db.User, as: 'User', attributes: ['id', 'firstName', 'lastName', 'address', 'tel', 'image'] },
 
                 ],
                 raw: true,

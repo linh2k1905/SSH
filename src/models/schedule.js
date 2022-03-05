@@ -1,6 +1,6 @@
 'use strict';
 const {
-    Model
+    Model, DATE
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
     class Schedule extends Model {
@@ -14,7 +14,8 @@ module.exports = (sequelize, DataTypes) => {
 
         idOwner: DataTypes.INTEGER,
         time: DataTypes.STRING,
-        date: DataTypes.DATE
+        date: DataTypes.STRING,
+        currrentNumber: DataTypes.INTEGER
     }, {
         sequelize,
         modelName: 'Schedule',

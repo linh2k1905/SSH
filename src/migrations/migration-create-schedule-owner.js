@@ -14,10 +14,13 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       date: {
-        type: Sequelize.DATE
+        type: Sequelize.STRING
       },
       time: {
         type: Sequelize.STRING
+      },
+      currrentNumber: {
+        type: Sequelize.INTEGER
       },
 
       createdAt: {
