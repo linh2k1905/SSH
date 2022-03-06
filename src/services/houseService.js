@@ -93,7 +93,6 @@ let editHouse = async (data) => {
 
             })
             if (house && house.id) {
-                console.log(house);
                 house.name = data.name
                 house.price = data.price
                 house.address = data.address
@@ -241,22 +240,24 @@ let getFilterHouseFromHome = (data) => {
         try {
             let house = await db.House.findAll({
                 where: {
-                    idCity: data.idCity,
-                    idTypeHouse: data.idTypeHouse,
+                    idCity: parseInt(data.idCity),
+                    idTypeHouse: parseInt(data.idTypeHouse),
                     price: {
+                        [Op.lte]: parseInt(data.price) * 1000000,
 
-                        [Op.lte]: data.price,
 
                     },
                     area: {
 
-                        [Op.gte]: data.area,
+                        [Op.lte]: parseInt(data.area),
+
 
                     },
 
 
-                },
 
+
+                },
                 include: [
                     {
                         model: db.HouseType,
@@ -268,6 +269,8 @@ let getFilterHouseFromHome = (data) => {
                 ],
                 raw: true,
                 nest: true
+
+
 
 
 

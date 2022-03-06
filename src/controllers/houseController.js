@@ -63,8 +63,8 @@ let getFilterHouse = async (req, res) => {
 
 
     try {
-        let data = req.body;
-        let response = await houseSerVice.getFilterHouse(data);
+
+        let response = await houseSerVice.getFilterHouse(req.body);
         return res.status(200).json(response);
     } catch (error) {
         console.log(error);
@@ -77,12 +77,8 @@ let getFilterHouse = async (req, res) => {
     }
 }
 let getFilterHouseFromHome = async (req, res) => {
-
-
-
     try {
-        let data = req.body;
-        let response = await houseSerVice.getFilterHouseFromHome(data);
+        let response = await houseSerVice.getFilterHouseFromHome(req.query);
         return res.status(200).json(response);
     } catch (error) {
         console.log(error);
