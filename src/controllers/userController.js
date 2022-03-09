@@ -133,6 +133,24 @@ let handleDeleteComment = async (req, res) => {
     let message = await userService.handleDeleteComment(req.body.id);
     return res.status(200).json(message)
 }
+
+let handleGetAllUsersByTypeUser = async (req, res) => {
+    let id = req.query.roleId
+    if (!id) {
+        return res.status(200).json({
+            errorCode: 1,
+            messageCode: " Missing input",
+            users: []
+        })
+    }
+    let users = await userService.handleGetAllUsersByTypeUser(id);
+    return res.status(200).json({
+        errorCode: 0,
+        errMessage: "ok",
+        users
+    })
+
+}
 module.exports = {
     handleLogin: handleLogin,
     handleGetAllUsers: handleGetAllUsers,
@@ -148,5 +166,6 @@ module.exports = {
     handleDeleteCity: handleDeleteCity,
     handleCreateNewComment: handleCreateNewComment,
     handleEditComment: handleEditComment,
-    handleDeleteComment: handleDeleteComment
+    handleDeleteComment: handleDeleteComment,
+    handleGetAllUsersByTypeUser: handleGetAllUsersByTypeUser
 }

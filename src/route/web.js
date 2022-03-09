@@ -19,6 +19,8 @@ let initWebRoute = (app) => {
     router.post('/put-crud', homeController.putCRUD);
     router.post('/api/login', userController.handleLogin);
     router.get('/api/get-all-users', userController.handleGetAllUsers);
+
+    router.get('/api/get-all-users-by-type-user', userController.handleGetAllUsersByTypeUser);
     router.post('/api/create-new-user', userController.handleCreateNewUser);
     router.post('/api/create-new-post', userController.handleCreateNewPost);
     router.put('/api/edit-user', userController.handleEditUser);
@@ -33,6 +35,8 @@ let initWebRoute = (app) => {
     router.get('/api/detail-house-by-id', houseController.getDetailHouseById);
     router.put('/api/edit-house-by-id', houseController.handleEditHouse);
     router.delete('/api/delete-house-by-id', houseController.handleDeleteHouse);
+    router.get('/api/get-all-type-house-by-id', houseController.getAllTypeHouseById);
+
     router.post('/api/create-new-city', userController.handleCreateNewCity);
     router.put('/api/edit-city-by-id', userController.handleEditCity);
     router.delete('/api/delete-city', userController.handleDeleteCity);

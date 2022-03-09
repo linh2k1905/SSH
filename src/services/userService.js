@@ -542,6 +542,38 @@ let handleDeleteComment = async (id) => {
     }
     )
 }
+let handleGetAllUsersByTypeUser = (id) => {
+
+    return new Promise(async (resolve, reject) => {
+        try {
+            let users = ''
+            if (id === 'ALL') {
+                users = await db.User.findAll({
+                    attributes: {
+                        exclude: ['password']
+                    }
+                });
+
+            }
+            if (id && id != "ALL") {
+                users = await db.User.findAll({
+                    where: { roleId: id },
+                    attributes: {
+                        exclude: ['password']
+                    },
+                    raw: false
+
+                })
+            }
+            resolve(users)
+
+
+        } catch (error) {
+            reject(error)
+        }
+    }
+    )
+}
 module.exports = {
     handleUserLogin: handleUserLogin,
     getAllUser: getAllUser,
@@ -558,6 +590,7 @@ module.exports = {
     deleteCity: deleteCity,
     handleCreateNewComment: handleCreateNewComment,
     editComment: editComment,
-    handleDeleteComment: handleDeleteComment
+    handleDeleteComment: handleDeleteComment,
+    handleGetAllUsersByTypeUser: handleGetAllUsersByTypeUser
 
 }

@@ -89,6 +89,25 @@ let getFilterHouseFromHome = async (req, res) => {
         })
 
     }
+
+
+}
+
+let getAllTypeHouseById = async (req, res) => {
+    try {
+        let response = await houseSerVice.getAllTypeHouseById(req.query.id);
+        return res.status(200).json(response);
+    } catch (error) {
+        console.log(error);
+        return res.status(200).json({
+            errorCode: -1,
+            message: 'Error from Server!!!'
+
+        })
+
+    }
+
+
 }
 module.exports = {
     getListLatestHouse: getListLatestHouse,
@@ -97,5 +116,6 @@ module.exports = {
     handleDeleteHouse: handleDeleteHouse,
     getListHouse: getListHouse,
     getFilterHouse: getFilterHouse,
-    getFilterHouseFromHome: getFilterHouseFromHome
+    getFilterHouseFromHome: getFilterHouseFromHome,
+    getAllTypeHouseById: getAllTypeHouseById
 }

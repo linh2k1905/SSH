@@ -295,6 +295,48 @@ let getFilterHouseFromHome = (data) => {
 
     })
 }
+
+let getAllTypeHouseById = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let house = await db.House.findAll({
+                where: { idTypeHouse: id },
+
+                include: [
+                    {
+                        model: db.HouseType,
+
+                    },
+                    { model: db.City, attributes: ['name'] },
+                    { model: db.User, as: 'User', attributes: ['id', 'firstName', 'lastName', 'address', 'tel', 'image'] },
+
+                ],
+                raw: true,
+                nest: true
+
+
+
+            });
+            if (house && house.image)
+                house.image = Buffer.from(house.image, 'base64').toString('binary');
+
+
+            resolve({
+                errorCode: 0,
+                data: house
+            });
+
+
+        } catch (error) {
+            reject({
+                errorCode: 1,
+                messageCode: ' Loi' + error
+            })
+        }
+
+
+    })
+}
 module.exports = {
 
     getLastestHome: getLastestHome,
@@ -303,5 +345,6 @@ module.exports = {
     deleteHouse: deleteHouse,
     getAllHome: getAllHome,
     getFilterHouse: getFilterHouse,
-    getFilterHouseFromHome: getFilterHouseFromHome
+    getFilterHouseFromHome: getFilterHouseFromHome,
+    getAllTypeHouseById: getAllTypeHouseById
 }
