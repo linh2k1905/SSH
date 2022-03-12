@@ -1,6 +1,21 @@
 
-import db from '../models/index'
+import db from '../models/index';
+import bcrypt from 'bcryptjs';
+const salt = bcrypt.genSaltSync(10);
+let hashUserPassword = (password) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let hash = await bcrypt.hashSync(password, salt);
+            resolve(hash)
 
+        } catch (error) {
+            reject(error)
+
+        }
+
+
+    })
+}
 
 let postBookingApointment = (data) => {
 
@@ -14,12 +29,18 @@ let postBookingApointment = (data) => {
                 });
             }
             else {
+                let hashUserPasswordFromBcrypt = await hashUserPassword(data.password);
 
                 users = await db.User.findOrCreate({
-                    where: { email: data.email },
+                    where: {
+                        email: data.email,
+                        password: hashUserPasswordFromBcrypt
+                    },
                     defaults: {
                         email: data.email,
-                        roleId: 4
+                        roleId: 4,
+                        tel: data.tel,
+                        password: hashUserPasswordFromBcrypt,
                     }
                 })
                 if (users && users[0]) {
