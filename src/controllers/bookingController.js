@@ -2,27 +2,26 @@
 import bookingService from '../services/bookingService'
 
 
-let handleGetInfoBooking = async (req, res) => {
-    let idOwner = req.query.idOwner;
-    let idHouse = req.query.idHouse;
-    console.log(idHouse, idOwner);
+let postBookingApointment = async (req, res) => {
+    let data = req.body;
 
-    if (!req.query.idOwner || !req.query.idHouse) {
+
+    if (!data) {
         return res.status(200).json({
             errorCode: 1,
             messageCode: " Missing input",
             users: []
         })
     }
-    let users = await userService.handleGetInfoBooking(idHouse, idOwner);
+    let booking = await bookingService.postBookingApointment(data);
     return res.status(200).json({
         errorCode: 0,
         errMessage: "ok",
-        users
+        data: booking
     })
 
 }
 module.exports = {
 
-    handleGetInfoBooking: handleGetInfoBooking
+    postBookingApointment: postBookingApointment
 }

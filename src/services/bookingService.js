@@ -1,33 +1,56 @@
 
 import db from '../models/index'
-import bcrypt from 'bcryptjs'
-import { raw } from 'body-parser';
-import { reject } from 'bcrypt/promises';
 
-let handleGetInfoBooking = (idHouse, idOwner) => {
+
+let postBookingApointment = (data) => {
 
     return new Promise(async (resolve, reject) => {
         try {
-            let users = ''
-
-            if (idOwner && idHouse) {
-                users = await db.House.findOne({
-                    where: { id: idHouse },
-                    include: [
-                        { model: db.HouseType },
-                        { model: db.City },
-                        { model: db.User, attributes: ['firstName', 'lastName', 'address', 'tel', 'image', 'email'] },
-
-                    ],
-
-
-                    raw: true,
-                    nest: true
-
-                })
+            let users = '';
+            if (!data.email || !data.idHouse || !data.time || !data.date) {
+                resolve({
+                    errorCode: 0,
+                    errorMessage: "Missing parameter"
+                });
             }
-            resolve(users)
+            else {
 
+                users = await db.User.findOrCreate({
+                    where: { email: data.email },
+                    defaults: {
+                        email: data.email,
+                        roleId: 4
+                    }
+                })
+                if (users && users[0]) {
+                    await db.Booking.findOrCreate({
+                        where: {
+                            idUser: users[0].id,
+                            idHouse: data.idHouse,
+                            time: data.time,
+                            date: data.date,
+
+                        },
+                        defaults: {
+                            idUser: users[0].id,
+                            idHouse: data.idHouse,
+                            time: data.time,
+                            date: data.date,
+                            description: data.desc,
+                            status: 'Đang được xử lý'
+
+                        }
+
+
+                    })
+                }
+                resolve({
+                    errorCode: 0,
+                    errorMessage: "Create success",
+                    users: users
+                })
+
+            }
 
         } catch (error) {
             reject(error)
@@ -36,23 +59,7 @@ let handleGetInfoBooking = (idHouse, idOwner) => {
     )
 }
 module.exports = {
-    handleUserLogin: handleUserLogin,
-    getAllUser: getAllUser,
-    createNewUser: createNewUser,
-    deleteUser: deleteUser,
-    editUser: editUser,
-    getRoleUser: getRoleUser,
-    getAllCity: getAllCity,
-    getAllTypeHouse: getAllTypeHouse,
-    createNewPost: createNewPost,
-    createNewCity: createNewCity,
-    checkCity: checkCity,
-    editCity: editCity,
-    deleteCity: deleteCity,
-    handleCreateNewComment: handleCreateNewComment,
-    editComment: editComment,
-    handleDeleteComment: handleDeleteComment,
-    handleGetAllUsersByTypeUser: handleGetAllUsersByTypeUser,
-    handleGetInfoBooking: handleGetInfoBooking
+
+    postBookingApointment: postBookingApointment
 
 }

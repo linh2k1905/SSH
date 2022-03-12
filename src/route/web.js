@@ -3,6 +3,7 @@ import homeController from '../controllers/homeController'
 import userController from '../controllers/userController'
 import ownerController from '../controllers/ownerController'
 import houseController from "../controllers/houseController"
+import bookingController from '../controllers/bookingController'
 let router = express.Router();
 
 let initWebRoute = (app) => {
@@ -47,6 +48,7 @@ let initWebRoute = (app) => {
     router.get('/api/get-filter-house', houseController.getFilterHouse);
     router.get('/api/get-filter-house-from-home', houseController.getFilterHouseFromHome);
     router.post('/api/create-bulk-schedule', ownerController.createBulkSchedule);
+    router.post('/api/user-booking', bookingController.postBookingApointment);
     router.get('/api/get-schedule-owner', ownerController.getScheduleOwner);
     return app.use(router)
 }
