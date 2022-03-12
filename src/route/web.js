@@ -28,6 +28,7 @@ let initWebRoute = (app) => {
     router.get('/api/getRole', userController.handleGetRole);
     router.get('/api/getCity', userController.handleGetCity);
     router.get('/api/getTypeHouse', userController.handleGetTypeHouse);
+    router.get('/api/get-info-booking', userController.handleGetInfoBooking);
     router.get('/api/top-owner-home', ownerController.getTopOwnertoHome);
 
     router.get('/api/get-all-house', houseController.getListLatestHouse);

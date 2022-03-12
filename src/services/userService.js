@@ -574,6 +574,39 @@ let handleGetAllUsersByTypeUser = (id) => {
     }
     )
 }
+
+
+let handleGetInfoBooking = (idHouse, idOwner) => {
+
+    return new Promise(async (resolve, reject) => {
+        try {
+            let users = ''
+
+            if (idOwner && idHouse) {
+                users = await db.House.findOne({
+                    where: { id: idHouse },
+                    include: [
+                        { model: db.HouseType },
+                        { model: db.City },
+                        { model: db.User, attributes: ['firstName', 'lastName', 'address', 'tel', 'image', 'email'] },
+
+                    ],
+
+
+                    raw: true,
+                    nest: true
+
+                })
+            }
+            resolve(users)
+
+
+        } catch (error) {
+            reject(error)
+        }
+    }
+    )
+}
 module.exports = {
     handleUserLogin: handleUserLogin,
     getAllUser: getAllUser,
@@ -591,6 +624,7 @@ module.exports = {
     handleCreateNewComment: handleCreateNewComment,
     editComment: editComment,
     handleDeleteComment: handleDeleteComment,
-    handleGetAllUsersByTypeUser: handleGetAllUsersByTypeUser
+    handleGetAllUsersByTypeUser: handleGetAllUsersByTypeUser,
+    handleGetInfoBooking: handleGetInfoBooking
 
 }
