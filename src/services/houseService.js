@@ -121,7 +121,6 @@ let getDetailHouse = (id) => {
         try {
             let house = await db.House.findOne({
                 where: { id: id },
-
                 include: [
                     {
                         model: db.HouseType,
@@ -129,12 +128,9 @@ let getDetailHouse = (id) => {
                     },
                     { model: db.City, attributes: ['name'] },
                     { model: db.User, as: 'User', attributes: ['id', 'firstName', 'lastName', 'address', 'tel', 'image'] },
-
                 ],
                 raw: true,
                 nest: true
-
-
 
             });
             if (house && house.image)

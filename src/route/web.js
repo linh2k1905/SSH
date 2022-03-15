@@ -49,7 +49,13 @@ let initWebRoute = (app) => {
     router.get('/api/get-filter-house-from-home', houseController.getFilterHouseFromHome);
     router.post('/api/create-bulk-schedule', ownerController.createBulkSchedule);
     router.post('/api/user-booking', bookingController.postBookingApointment);
+    router.get('/api/admin-booking', bookingController.getAllBookingApointment);
+    router.delete('/api/delete-booking-by-id', userController.handleDeleteBookingById);
+    router.put('/api/edit-booking-by-id', userController.handleEditBookingById);
+    router.post('/api/user-comment', bookingController.commentPost);
     router.get('/api/get-schedule-owner', ownerController.getScheduleOwner);
+    router.get('/api/get-all-comment-by-houseId', userController.getAllCommentByIdHouse);
+    router.get('/api/get-all-comment', userController.getAllComment);
     return app.use(router)
 }
 module.exports = initWebRoute

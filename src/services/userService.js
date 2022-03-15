@@ -461,6 +461,7 @@ let handleCreateNewComment = (data) => {
 
 
 
+
             })
             resolve({
                 errorCode: 0,
@@ -607,6 +608,136 @@ let handleGetInfoBooking = (idHouse, idOwner) => {
     }
     )
 }
+
+
+let getAllCommentByIdHouse = (idHouse) => {
+
+    return new Promise(async (resolve, reject) => {
+        try {
+            let comments = '';
+
+
+            if (idHouse) {
+                comments = await db.Comment.findAll({
+                    where: { houseId: idHouse },
+                    include: [
+                        { model: db.User, as: 'User', attributes: ['firstName', 'lastName', 'address', 'tel', 'image'] },
+
+                    ],
+                    raw: true,
+                    nest: true
+
+                })
+
+            }
+
+
+            resolve(comments)
+
+
+        } catch (error) {
+            reject(error)
+        }
+    }
+    )
+}
+
+let getAllComment = () => {
+
+    return new Promise(async (resolve, reject) => {
+        try {
+            let comments = await db.Comment.findAll({
+
+                include: [
+                    { model: db.User, as: 'User', attributes: ['firstName', 'lastName', 'address', 'tel', 'image'] },
+
+                ],
+                raw: true,
+                nest: true
+
+            })
+
+
+
+
+            resolve(comments)
+
+
+        } catch (error) {
+            reject(error)
+        }
+    }
+    )
+}
+let handleDeleteBookingById = (idInput) => {
+
+    return new Promise(async (resolve, reject) => {
+
+        try {
+            let booking = await db.Booking.findOne({
+                id: idInput
+            })
+            if (!booking) {
+                resolve({
+                    errorCode: 0,
+                    errorMessage: 'Booking not found'
+                })
+            }
+            else {
+                await db.Booking.destroy({
+                    where: { id: idInput },
+                    raw: false
+                });
+                resolve({
+                    errorCode: 0,
+                    messageCode: 'The booking is deleted'
+                })
+
+            }
+
+
+        } catch (error) {
+            reject(error)
+        }
+    }
+    )
+}
+let handleEditBookingById = async (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!data.id) {
+                resolve({
+                    errorCode: 2,
+                    messageCode: "Missing input"
+                })
+            }
+            let booking = await db.Booking.findOne({
+                where: { id: data.id },
+                raw: false
+
+            })
+            if (booking) {
+                booking.time = data.time;
+                booking.date = data.date;
+                booking.idUser = data.idUser;
+                booking.idHouse = data.idHouse;
+                booking.description = data.desc;
+                booking.status = data.status;
+
+
+                await booking.save();
+                resolve({
+                    errorCode: 0,
+                    messageCode: 'Update successfully'
+                })
+
+
+            }
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
 module.exports = {
     handleUserLogin: handleUserLogin,
     getAllUser: getAllUser,
@@ -625,6 +756,10 @@ module.exports = {
     editComment: editComment,
     handleDeleteComment: handleDeleteComment,
     handleGetAllUsersByTypeUser: handleGetAllUsersByTypeUser,
-    handleGetInfoBooking: handleGetInfoBooking
+    handleGetInfoBooking: handleGetInfoBooking,
+    getAllCommentByIdHouse: getAllCommentByIdHouse,
+    getAllComment: getAllComment,
+    handleDeleteBookingById: handleDeleteBookingById,
+    handleEditBookingById: handleEditBookingById
 
 }

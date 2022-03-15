@@ -110,6 +110,7 @@ let handleDeleteCity = async (req, res) => {
     return res.status(200).json(message)
 }
 let handleCreateNewComment = async (req, res) => {
+    console.log(req.body);
     let message = await userService.handleCreateNewComment(req.body);
 
     return res.status(200).json({
@@ -156,7 +157,6 @@ let handleGetAllUsersByTypeUser = async (req, res) => {
 let handleGetInfoBooking = async (req, res) => {
     let idOwner = req.query.idOwner;
     let idHouse = req.query.idHouse;
-    console.log(idHouse, idOwner);
 
     if (!req.query.idOwner || !req.query.idHouse) {
         return res.status(200).json({
@@ -171,6 +171,64 @@ let handleGetInfoBooking = async (req, res) => {
         errMessage: "ok",
         users
     })
+
+}
+
+
+let getAllCommentByIdHouse = async (req, res) => {
+
+
+    if (!req.query.idHouse) {
+        return res.status(200).json({
+            errorCode: 1,
+            messageCode: " Missing input",
+            comments: []
+        })
+    }
+    let comments = await userService.getAllCommentByIdHouse(req.query.idHouse);
+    return res.status(200).json({
+        errorCode: 0,
+        errMessage: "ok",
+        comments: comments
+    })
+
+}
+let getAllComment = async (req, res) => {
+
+
+
+    let comments = await userService.getAllComment();
+    return res.status(200).json({
+        errorCode: 0,
+        errMessage: "ok",
+        comments: comments
+    })
+
+}
+let handleDeleteBookingById = async (req, res) => {
+    if (!req.query.id) {
+        return res.status(200).json({
+            errorCode: -1,
+            errMessage: "Missing Parameter",
+
+        })
+
+    }
+
+
+    let request = await userService.handleDeleteBookingById(req.query.id);
+    return res.status(200).json({
+
+        request: request
+
+    })
+
+}
+let handleEditBookingById = async (req, res) => {
+    let data = req.body;
+    let message = await userService.handleEditBookingById(data);
+    return res.status(200).json(message)
+
 
 }
 module.exports = {
@@ -190,5 +248,11 @@ module.exports = {
     handleEditComment: handleEditComment,
     handleDeleteComment: handleDeleteComment,
     handleGetAllUsersByTypeUser: handleGetAllUsersByTypeUser,
-    handleGetInfoBooking: handleGetInfoBooking
+    handleGetInfoBooking: handleGetInfoBooking,
+    getAllCommentByIdHouse: getAllCommentByIdHouse,
+    getAllComment: getAllComment,
+    handleDeleteBookingById: handleDeleteBookingById,
+    handleEditBookingById: handleEditBookingById
+
+
 }

@@ -1,6 +1,7 @@
 
 import db from '../models/index';
 import bcrypt from 'bcryptjs';
+const { Op } = require('@sequelize/core');
 const salt = bcrypt.genSaltSync(10);
 let hashUserPassword = (password) => {
     return new Promise(async (resolve, reject) => {
@@ -79,8 +80,106 @@ let postBookingApointment = (data) => {
     }
     )
 }
+
+
+
+let commentPost = (data) => {
+
+    return new Promise(async (resolve, reject) => {
+        try {
+
+            if (!data.userId || !data.content || !data.houseId) {
+                resolve({
+                    errorCode: 0,
+                    errorMessage: "Missing parameter"
+                });
+            }
+            else {
+                await db.Comment.create({
+                    userId: data.userId,
+                    houseId: data.houseId,
+                    content: data.content,
+                    status: 'OK'
+
+                })
+
+                resolve({
+                    errorCode: 0,
+                    errorMessage: "Create success",
+
+                })
+
+            }
+
+        } catch (error) {
+            reject(error)
+        }
+    }
+    )
+}
+
+let getAllBookingApointment = (data) => {
+
+    return new Promise(async (resolve, reject) => {
+        try {
+
+            if (!data) {
+                resolve({
+                    errorCode: 0,
+                    errorMessage: "Missing parameter"
+                });
+            }
+            else {
+                if (data === 'ALL') {
+                    let bookings = await db.Booking.findAll({
+                        include: [
+                            {
+                                model: db.House,
+
+                            },
+                            { model: db.User, as: 'User', attributes: ['email', 'tel'] },
+
+                        ],
+                        raw: true,
+                        nest: true
+                    });
+                    resolve(bookings);
+                }
+                else {
+                    let bookings = await db.Booking.findAll({
+                        include: [
+                            {
+                                model: db.House,
+                                where: {
+
+                                    idUser: {
+                                        [Op.eq]: data
+                                    }
+                                },
+                                require: true
+
+                            },
+                            { model: db.User, as: 'User', attributes: ['firstName', 'lastName', 'address', 'tel', 'image'] },
+
+                        ],
+                        raw: true,
+                        nest: true
+                    });
+                    resolve(bookings);
+
+                }
+            }
+
+        } catch (error) {
+            reject(error)
+        }
+    }
+    )
+}
 module.exports = {
 
-    postBookingApointment: postBookingApointment
+    postBookingApointment: postBookingApointment,
+    commentPost: commentPost,
+    getAllBookingApointment: getAllBookingApointment
 
 }
