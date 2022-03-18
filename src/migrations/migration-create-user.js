@@ -25,7 +25,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       roleID: {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER
       },
       address: {
         type: Sequelize.STRING

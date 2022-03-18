@@ -55,6 +55,8 @@ let initWebRoute = (app) => {
     router.post('/api/user-comment', bookingController.commentPost);
     router.get('/api/get-schedule-owner', ownerController.getScheduleOwner);
     router.get('/api/get-all-comment-by-houseId', userController.getAllCommentByIdHouse);
+    router.get('/api/get-user-by-id', userController.getUserById);
+    router.get('/api/get-house-by-id-user', userController.getHouseByIdUser);
     router.get('/api/get-all-comment', userController.getAllComment);
     return app.use(router)
 }

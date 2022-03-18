@@ -738,6 +738,58 @@ let handleEditBookingById = async (data) => {
         }
     })
 }
+
+let getUserById = (id) => {
+
+    return new Promise(async (resolve, reject) => {
+        try {
+            let users = '';
+            if (id) {
+                users = await db.User.findOne({
+                    where: { id: id },
+                    attributes: {
+                        exclude: ['password']
+                    },
+
+
+                })
+            }
+            resolve(users)
+
+
+        } catch (error) {
+            reject(error)
+        }
+    }
+    )
+}
+let getHouseByIdUser = (id) => {
+
+    return new Promise(async (resolve, reject) => {
+        try {
+            let houses = '';
+            if (id) {
+                houses = await db.House.findAll({
+                    where: { idUser: id },
+                    include: [
+                        { model: db.HouseType },
+                        { model: db.City },
+                        { model: db.User, attributes: ['firstName', 'lastName', 'address', 'tel', 'email'] },
+
+                    ],
+                    raw: true,
+                    nest: true
+                })
+            }
+            resolve(houses)
+
+
+        } catch (error) {
+            reject(error)
+        }
+    }
+    )
+}
 module.exports = {
     handleUserLogin: handleUserLogin,
     getAllUser: getAllUser,
@@ -760,6 +812,7 @@ module.exports = {
     getAllCommentByIdHouse: getAllCommentByIdHouse,
     getAllComment: getAllComment,
     handleDeleteBookingById: handleDeleteBookingById,
-    handleEditBookingById: handleEditBookingById
-
+    handleEditBookingById: handleEditBookingById,
+    getUserById: getUserById,
+    getHouseByIdUser: getHouseByIdUser
 }

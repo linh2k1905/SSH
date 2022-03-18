@@ -153,6 +153,41 @@ let handleGetAllUsersByTypeUser = async (req, res) => {
 
 }
 
+let getHouseByIdUser = async (req, res) => {
+    let id = req.query.id
+    if (!id) {
+        return res.status(200).json({
+            errorCode: 1,
+            messageCode: " Missing input",
+            houses: []
+        })
+    }
+    let houses = await userService.getHouseByIdUser(id);
+    return res.status(200).json({
+        errorCode: 0,
+        errMessage: "ok",
+        houses
+    })
+
+}
+let getUserById = async (req, res) => {
+    let id = req.query.id
+    if (!id) {
+        return res.status(200).json({
+            errorCode: 1,
+            messageCode: " Missing input",
+            users: []
+        })
+    }
+    let users = await userService.getUserById(id);
+    return res.status(200).json({
+        errorCode: 0,
+        errMessage: "ok",
+        users
+    })
+
+}
+
 
 let handleGetInfoBooking = async (req, res) => {
     let idOwner = req.query.idOwner;
@@ -252,7 +287,9 @@ module.exports = {
     getAllCommentByIdHouse: getAllCommentByIdHouse,
     getAllComment: getAllComment,
     handleDeleteBookingById: handleDeleteBookingById,
-    handleEditBookingById: handleEditBookingById
+    handleEditBookingById: handleEditBookingById,
+    getUserById: getUserById,
+    getHouseByIdUser: getHouseByIdUser
 
 
 }

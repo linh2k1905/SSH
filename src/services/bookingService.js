@@ -2,7 +2,10 @@
 import db from '../models/index';
 import bcrypt from 'bcryptjs';
 const { Op } = require('@sequelize/core');
+import { sendSimpleEmail } from './emailService';
 const salt = bcrypt.genSaltSync(10);
+import moment from 'moment';
+import localization from 'moment/locale/vi';
 let hashUserPassword = (password) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -29,13 +32,25 @@ let postBookingApointment = (data) => {
                     errorMessage: "Missing parameter"
                 });
             }
+
             else {
+                let dateBooking = moment(new Date(parseInt(data.date))).format('DD/MM/YYYY')
+                await sendSimpleEmail({
+                    recieverEmail: data.email,
+                    name: data.name ? data.name : ' ',
+                    address: data.address ? data.address : '',
+                    time: data.time + " " + dateBooking,
+                    ownerName: data.nameOwner ? data.nameOwner : '',
+
+                })
+
+
+
                 let hashUserPasswordFromBcrypt = await hashUserPassword(data.password);
 
                 users = await db.User.findOrCreate({
                     where: {
                         email: data.email,
-                        password: hashUserPasswordFromBcrypt
                     },
                     defaults: {
                         email: data.email,
