@@ -5,7 +5,103 @@ const { Op } = require('@sequelize/core');
 import { sendSimpleEmail } from './emailService';
 const salt = bcrypt.genSaltSync(10);
 import moment from 'moment';
+require('dotenv').config();
+import { v4 as uuidv4 } from 'uuid';
+let buildUrlEmail = (houseId, token) => {
+    let result = `${process.env.URL_REACT}/verify-booking?token=${token}&bookingId=${houseId}`
+    return result;
+}
+
 import localization from 'moment/locale/vi';
+
+let postBookingApointment = (data) => {
+
+    return new Promise(async (resolve, reject) => {
+        try {
+            let users = '';
+            if (!data.email || !data.idHouse || !data.time || !data.date || !data.password) {
+                resolve({
+                    errorCode: 0,
+                    errorMessage: "Missing parameter"
+                });
+            }
+
+            else {
+
+
+
+                let hashUserPasswordFromBcrypt = await hashUserPassword(data.password);
+                let token = uuidv4();
+                users = await db.User.findOrCreate({
+                    where: {
+                        email: data.email
+                    },
+                    defaults: {
+                        email: data.email,
+                        roleId: 4,
+                        tel: data.tel,
+                        password: hashUserPasswordFromBcrypt,
+                    }
+                })
+                if (users && users[0]) {
+                    let rlt = await bcrypt.compareSync(data.password, users[0].password);
+                    if (rlt) {
+                        await db.Booking.findOrCreate({
+                            where: {
+                                idUser: users[0].id,
+                                idHouse: data.idHouse,
+                                time: data.time,
+                                date: data.date,
+                                token: token
+
+                            },
+                            defaults: {
+                                idUser: users[0].id,
+                                idHouse: data.idHouse,
+                                time: data.time,
+                                date: data.date,
+                                description: data.desc,
+                                token: token,
+                                status: 'Đang được xử lý'
+
+                            }
+
+
+                        })
+                        let dateBooking = moment(new Date(parseInt(data.date))).format('DD/MM/YYYY')
+                        await sendSimpleEmail({
+                            recieverEmail: data.email,
+                            name: data.name ? data.name : ' ',
+                            address: data.address ? data.address : '',
+                            time: data.time + " " + dateBooking,
+                            ownerName: data.nameOwner ? data.nameOwner : '',
+                            linkRedirect: buildUrlEmail(data.idHouse, token)
+                        })
+
+                        resolve({
+                            errorCode: 0,
+                            errorMessage: "Create success",
+                            users: users
+                        })
+
+                    }
+                    resolve({
+                        errorCode: -1,
+                        errorMessage: 'Wrong password',
+                        users: []
+                    })
+
+                }
+
+
+            }
+
+        } catch (error) {
+            reject(error)
+        }
+    }
+    )
+}
 let hashUserPassword = (password) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -19,81 +115,6 @@ let hashUserPassword = (password) => {
 
 
     })
-}
-
-let postBookingApointment = (data) => {
-
-    return new Promise(async (resolve, reject) => {
-        try {
-            let users = '';
-            if (!data.email || !data.idHouse || !data.time || !data.date) {
-                resolve({
-                    errorCode: 0,
-                    errorMessage: "Missing parameter"
-                });
-            }
-
-            else {
-                let dateBooking = moment(new Date(parseInt(data.date))).format('DD/MM/YYYY')
-                await sendSimpleEmail({
-                    recieverEmail: data.email,
-                    name: data.name ? data.name : ' ',
-                    address: data.address ? data.address : '',
-                    time: data.time + " " + dateBooking,
-                    ownerName: data.nameOwner ? data.nameOwner : '',
-
-                })
-
-
-
-                let hashUserPasswordFromBcrypt = await hashUserPassword(data.password);
-
-                users = await db.User.findOrCreate({
-                    where: {
-                        email: data.email,
-                    },
-                    defaults: {
-                        email: data.email,
-                        roleId: 4,
-                        tel: data.tel,
-                        password: hashUserPasswordFromBcrypt,
-                    }
-                })
-                if (users && users[0]) {
-                    await db.Booking.findOrCreate({
-                        where: {
-                            idUser: users[0].id,
-                            idHouse: data.idHouse,
-                            time: data.time,
-                            date: data.date,
-
-                        },
-                        defaults: {
-                            idUser: users[0].id,
-                            idHouse: data.idHouse,
-                            time: data.time,
-                            date: data.date,
-                            description: data.desc,
-                            status: 'Đang được xử lý'
-
-                        }
-
-
-                    })
-                }
-                resolve({
-                    errorCode: 0,
-                    errorMessage: "Create success",
-                    users: users
-                })
-
-            }
-
-        } catch (error) {
-            reject(error)
-        }
-    }
-    )
 }
 
 
@@ -191,10 +212,46 @@ let getAllBookingApointment = (data) => {
     }
     )
 }
+let postVerifyBooking = (data) => {
+
+    return new Promise(async (resolve, reject) => {
+        try {
+
+            if (!data.token || !data.idBooking) {
+                resolve({
+                    errorCode: 0,
+                    errorMessage: "Missing parameter"
+                });
+            }
+            else {
+
+                let booking = await db.Booking.findOne({
+                    id: data.idBooking,
+                    token: data.token,
+                    status: 'Đang được xử lý',
+                    raw: false
+                });
+                booking.status = 'Đã Xác Nhận';
+                booking.save();
+
+                resolve({
+                    errorCode: 0,
+                    errorMessage: 'Update success'
+                });
+            }
+
+
+        } catch (error) {
+            reject(error)
+        }
+    }
+    )
+}
 module.exports = {
 
     postBookingApointment: postBookingApointment,
     commentPost: commentPost,
-    getAllBookingApointment: getAllBookingApointment
+    getAllBookingApointment: getAllBookingApointment,
+    postVerifyBooking: postVerifyBooking
 
 }

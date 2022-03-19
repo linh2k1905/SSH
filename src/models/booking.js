@@ -21,8 +21,10 @@ module.exports = (sequelize, DataTypes) => {
         idHouse: DataTypes.INTEGER,
         time: DataTypes.STRING,
         date: DataTypes.STRING,
+        token: DataTypes.STRING,
         description: DataTypes.TEXT,
-        status: DataTypes.STRING
+        status: DataTypes.STRING,
+
     }, {
         sequelize,
         modelName: 'Booking',

@@ -20,7 +20,8 @@ module.exports = {
         type: Sequelize.STRING
       },
       currrentNumber: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        default: 0
       },
 
       createdAt: {

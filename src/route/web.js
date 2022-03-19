@@ -42,9 +42,7 @@ let initWebRoute = (app) => {
     router.post('/api/create-new-city', userController.handleCreateNewCity);
     router.put('/api/edit-city-by-id', userController.handleEditCity);
     router.delete('/api/delete-city', userController.handleDeleteCity);
-    router.post('/api/create-new-comment', userController.handleCreateNewComment);
-    router.put('/api/edit-comment-by-id', userController.handleEditComment);
-    router.delete('/api/delete-comment', userController.handleDeleteComment);
+
     router.get('/api/get-filter-house', houseController.getFilterHouse);
     router.get('/api/get-filter-house-from-home', houseController.getFilterHouseFromHome);
     router.post('/api/create-bulk-schedule', ownerController.createBulkSchedule);
@@ -54,10 +52,16 @@ let initWebRoute = (app) => {
     router.put('/api/edit-booking-by-id', userController.handleEditBookingById);
     router.post('/api/user-comment', bookingController.commentPost);
     router.get('/api/get-schedule-owner', ownerController.getScheduleOwner);
-    router.get('/api/get-all-comment-by-houseId', userController.getAllCommentByIdHouse);
+
     router.get('/api/get-user-by-id', userController.getUserById);
     router.get('/api/get-house-by-id-user', userController.getHouseByIdUser);
+
+    router.post('/api/verify-book-appoinment', bookingController.postVerifyBooking);
     router.get('/api/get-all-comment', userController.getAllComment);
+    router.post('/api/create-new-comment', userController.handleCreateNewComment);
+    router.put('/api/edit-comment-by-id', userController.handleEditComment);
+    router.delete('/api/delete-comment', userController.handleDeleteComment);
+    router.get('/api/get-all-comment-by-houseId', userController.getAllCommentByIdHouse);
     return app.use(router)
 }
 module.exports = initWebRoute

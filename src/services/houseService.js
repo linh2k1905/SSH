@@ -188,36 +188,61 @@ let deleteHouse = async (id) => {
 let getFilterHouse = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            let house = await db.House.findAll({
-                where: {
-                    idUser: data.idUser,
-                    idCity: data.idCity,
-                    idTypeHouse: data.idTypeHouse
-                },
-
-                include: [
-                    {
-                        model: db.HouseType,
+            if (data.idUser && data.idCity) {
+                let house = await db.House.findAll({
+                    where: {
+                        idUser: data.idUser,
+                        idCity: data.idCity,
 
                     },
-                    { model: db.City },
-                    { model: db.User, as: 'User', attributes: ['firstName', 'lastName', 'address', 'tel', 'image'] },
+                    include: [
+                        {
+                            model: db.HouseType,
 
-                ],
-                raw: true,
-                nest: true
+                        },
+                        { model: db.City },
+                        { model: db.User, as: 'User', attributes: ['firstName', 'lastName', 'address', 'tel', 'image'] },
 
+                    ],
+                    raw: true,
+                    nest: true
+                });
+                if (house && house.image)
+                    house.image = Buffer.from(house.image, 'base64').toString('binary');
+                resolve({
+                    errorCode: 0,
+                    data: house
+                });
+            }
+            else {
 
+                let house = await db.House.findAll({
+                    where: {
+                        [Op.or]: {
+                            idUser: data.idUser,
+                            idCity: data.idCity
+                        }
+                    },
+                    include: [
+                        {
+                            model: db.HouseType,
 
-            });
-            if (house && house.image)
-                house.image = Buffer.from(house.image, 'base64').toString('binary');
+                        },
+                        { model: db.City },
+                        { model: db.User, as: 'User', attributes: ['firstName', 'lastName', 'address', 'tel', 'image'] },
 
+                    ],
+                    raw: true,
+                    nest: true
+                });
+                if (house && house.image)
+                    house.image = Buffer.from(house.image, 'base64').toString('binary');
+                resolve({
+                    errorCode: 0,
+                    data: house
+                });
 
-            resolve({
-                errorCode: 0,
-                data: house
-            });
+            }
 
 
         } catch (error) {

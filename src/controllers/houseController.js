@@ -59,13 +59,16 @@ let handleDeleteHouse = async (req, res) => {
     return res.status(200).json(message)
 }
 let getFilterHouse = async (req, res) => {
-
-
+    console.log(req.query);
 
     try {
+        if (req.query) {
+            let response = await houseSerVice.getFilterHouse(req.query);
+            return res.status(200).json(response);
 
-        let response = await houseSerVice.getFilterHouse(req.body);
-        return res.status(200).json(response);
+        }
+
+
     } catch (error) {
         console.log(error);
         return res.status(200).json({

@@ -26,6 +26,9 @@ module.exports = {
       date: {
         type: Sequelize.STRING
       },
+      token: {
+        type: Sequelize.STRING
+      },
       status: {
         type: Sequelize.STRING
       },

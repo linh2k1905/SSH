@@ -1,6 +1,6 @@
 //import { reject } from 'bcrypt/promises';
-import bookingService from '../services/bookingService'
 
+import bookingService from '../services/bookingService'
 
 let postBookingApointment = async (req, res) => {
     let data = req.body;
@@ -59,10 +59,19 @@ let getAllBookingApointment = async (req, res) => {
     })
 
 }
+let postVerifyBooking = async (req, res) => {
+
+    let booking = await bookingService.postVerifyBooking(req.body);
+    return res.status(200).json({
+        data: booking
+    })
+
+}
 
 module.exports = {
 
     postBookingApointment: postBookingApointment,
     commentPost: commentPost,
-    getAllBookingApointment: getAllBookingApointment
+    getAllBookingApointment: getAllBookingApointment,
+    postVerifyBooking: postVerifyBooking
 }
