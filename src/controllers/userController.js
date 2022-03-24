@@ -59,7 +59,6 @@ let handleDeleteUser = async (req, res) => {
 }
 let handleEditUser = async (req, res) => {
 
-    console.log(req.body);
     let message = await userService.editUser(req.body);
     return res.status(200).json(message)
 
@@ -111,7 +110,6 @@ let handleDeleteCity = async (req, res) => {
     return res.status(200).json(message)
 }
 let handleCreateNewComment = async (req, res) => {
-    console.log(req.body);
     let message = await userService.handleCreateNewComment(req.body);
 
     return res.status(200).json({
