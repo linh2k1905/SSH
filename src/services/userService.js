@@ -282,6 +282,7 @@ let deleteUser = async (id) => {
 }
 let editUser = async (data) => {
     return new Promise(async (resolve, reject) => {
+        console.log('request data body id', data.id, roleId);
         try {
             if (!data.id || !data.roleId) {
                 resolve({
@@ -294,12 +295,14 @@ let editUser = async (data) => {
                 raw: false
 
             })
+
             if (user) {
                 user.address = data.address;
                 user.lastName = data.lastName;
                 user.firstName = data.firstName;
-                user.roleId = data.roleId;
                 user.tel = data.tel;
+                user.roleid = data.roleId
+                console.log('exist of', user);
                 if (data.image) {
                     user.image = data.image;
                 }
