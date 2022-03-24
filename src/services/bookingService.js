@@ -225,19 +225,26 @@ let postVerifyBooking = (data) => {
             }
             else {
 
-                let booking = await db.Booking.findOne({
-                    id: data.idBooking,
-                    token: data.token,
-                    status: 'Đang được xử lý',
+                let aBooking = await db.Booking.findOne({
+                    where: {
+                        idHouse: parseInt(data.idBooking),
+                        token: data.token,
+
+                    },
                     raw: false
                 });
-                booking.status = 'Đã Xác Nhận';
-                booking.save();
+                console.log(aBooking);
+                if (aBooking) {
+                    aBooking.status = "Đã Xác Nhận";
+                    await aBooking.save();
 
-                resolve({
-                    errorCode: 0,
-                    errorMessage: 'Update success'
-                });
+                    resolve({
+                        errorCode: 0,
+                        errorMessage: 'Update success'
+                    });
+
+                }
+
             }
 
 

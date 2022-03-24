@@ -494,9 +494,7 @@ let editComment = async (data) => {
             })
             if (comment) {
 
-                comment.content = data.content;
-                comment.userId = data.userId;
-                comment.houseId = data.houseId;
+                comment.status = 'Hide';
 
                 await comment.save();
                 resolve({
@@ -619,7 +617,10 @@ let getAllCommentByIdHouse = (idHouse) => {
 
             if (idHouse) {
                 comments = await db.Comment.findAll({
-                    where: { houseId: idHouse },
+                    where: {
+                        houseId: idHouse,
+                        status: 'OK'
+                    },
                     include: [
                         { model: db.User, as: 'User', attributes: ['firstName', 'lastName', 'address', 'tel', 'image'] },
 
@@ -651,7 +652,11 @@ let getAllComment = () => {
                 include: [
                     { model: db.User, as: 'User', attributes: ['firstName', 'lastName', 'address', 'tel', 'image'] },
 
+                    { model: db.House }
                 ],
+
+
+
                 raw: true,
                 nest: true
 
