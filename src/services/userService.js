@@ -201,7 +201,6 @@ let createNewCity = (data) => {
 
 }
 let createNewPost = (data) => {
-    console.log(data);
     return new Promise(async (resolve, reject) => {
         try {
 
