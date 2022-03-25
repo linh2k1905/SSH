@@ -796,6 +796,38 @@ let getHouseByIdUser = (id) => {
     }
     )
 }
+let getHouseByMailUser = (mail) => {
+
+    return new Promise(async (resolve, reject) => {
+        try {
+            let houses = '';
+            if (mail) {
+                houses = await db.House.findAll({
+                    include: [
+                        { model: db.HouseType },
+                        { model: db.City },
+                        {
+                            model: db.User,
+                            where: {
+                                email: mail
+
+                            }
+                        },
+
+                    ],
+                    raw: true,
+                    nest: true
+                })
+            }
+            resolve(houses)
+
+
+        } catch (error) {
+            reject(error)
+        }
+    }
+    )
+}
 module.exports = {
     handleUserLogin: handleUserLogin,
     getAllUser: getAllUser,
@@ -820,5 +852,6 @@ module.exports = {
     handleDeleteBookingById: handleDeleteBookingById,
     handleEditBookingById: handleEditBookingById,
     getUserById: getUserById,
-    getHouseByIdUser: getHouseByIdUser
+    getHouseByIdUser: getHouseByIdUser,
+    getHouseByMailUser: getHouseByMailUser
 }

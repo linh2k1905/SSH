@@ -55,6 +55,7 @@ let initWebRoute = (app) => {
 
     router.get('/api/get-user-by-id', userController.getUserById);
     router.get('/api/get-house-by-id-user', userController.getHouseByIdUser);
+    router.get('/api/get-house-by-mail-user', userController.getHouseByMailUser);
 
     router.post('/api/verify-book-appoinment', bookingController.postVerifyBooking);
     router.get('/api/get-all-comment', userController.getAllComment);

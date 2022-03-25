@@ -169,6 +169,23 @@ let getHouseByIdUser = async (req, res) => {
     })
 
 }
+let getHouseByMailUser = async (req, res) => {
+    let mail = req.body.email;
+    if (!mail) {
+        return res.status(200).json({
+            errorCode: 1,
+            messageCode: " Missing input",
+            houses: []
+        })
+    }
+    let houses = await userService.getHouseByMailUser(mail);
+    return res.status(200).json({
+        errorCode: 0,
+        errMessage: "ok",
+        houses
+    })
+
+}
 let getUserById = async (req, res) => {
     let id = req.query.id
     if (!id) {
@@ -288,7 +305,8 @@ module.exports = {
     handleDeleteBookingById: handleDeleteBookingById,
     handleEditBookingById: handleEditBookingById,
     getUserById: getUserById,
-    getHouseByIdUser: getHouseByIdUser
+    getHouseByIdUser: getHouseByIdUser,
+    getHouseByMailUser: getHouseByMailUser
 
 
 }
