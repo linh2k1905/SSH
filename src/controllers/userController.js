@@ -170,7 +170,7 @@ let getHouseByIdUser = async (req, res) => {
 
 }
 let getHouseByMailUser = async (req, res) => {
-    let mail = req.body.email;
+    let mail = req.query.email;
     if (!mail) {
         return res.status(200).json({
             errorCode: 1,
