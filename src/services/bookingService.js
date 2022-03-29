@@ -219,7 +219,7 @@ let getAllBookingApointment = (data) => {
     )
 }
 let postVerifyBooking = (data) => {
-    console.log(data);
+
 
     return new Promise(async (resolve, reject) => {
         try {
@@ -261,6 +261,49 @@ let postVerifyBooking = (data) => {
     )
 }
 
+let postVerifyBookingFromOwner = (data) => {
+
+
+    return new Promise(async (resolve, reject) => {
+        try {
+
+            if (!data.token || !data.idBooking) {
+                resolve({
+                    errorCode: 0,
+                    errorMessage: "Missing parameter"
+                });
+            }
+            else {
+
+                let aBooking = await db.Booking.findOne({
+                    where: {
+                        idHouse: parseInt(data.idBooking),
+                        token: data.token,
+
+                    },
+                    raw: false
+                });
+                if (aBooking) {
+                    aBooking.status = "Đã Đồng Ý Hẹn";
+                    await aBooking.save();
+
+                    resolve({
+                        errorCode: 0,
+                        errorMessage: 'Update success'
+                    });
+
+                }
+
+            }
+
+
+        } catch (error) {
+            reject(error)
+        }
+    }
+    )
+}
+
 let postCancelVerifyBooking = (data) => {
 
     return new Promise(async (resolve, reject) => {
@@ -282,7 +325,7 @@ let postCancelVerifyBooking = (data) => {
                     },
                     raw: false
                 });
-                console.log(aBooking);
+
                 if (aBooking) {
                     aBooking.status = "Đã Hủy Hẹn";
                     await aBooking.save();
@@ -310,4 +353,5 @@ module.exports = {
     getAllBookingApointment: getAllBookingApointment,
     postVerifyBooking: postVerifyBooking,
     postCancelVerifyBooking: postCancelVerifyBooking,
+    postVerifyBookingFromOwner: postVerifyBookingFromOwner
 }

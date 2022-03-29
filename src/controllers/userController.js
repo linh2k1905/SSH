@@ -203,6 +203,23 @@ let getUserById = async (req, res) => {
     })
 
 }
+let getAllBookingByUserId = async (req, res) => {
+    let id = req.query.id
+    if (!id) {
+        return res.status(200).json({
+            errorCode: 1,
+            messageCode: " Missing input",
+            bookings: []
+        })
+    }
+    let bookings = await userService.getAllBookingByUserId(id);
+    return res.status(200).json({
+        errorCode: 0,
+        errMessage: "ok",
+        bookings
+    })
+
+}
 
 
 let handleGetInfoBooking = async (req, res) => {
@@ -306,7 +323,8 @@ module.exports = {
     handleEditBookingById: handleEditBookingById,
     getUserById: getUserById,
     getHouseByIdUser: getHouseByIdUser,
-    getHouseByMailUser: getHouseByMailUser
+    getHouseByMailUser: getHouseByMailUser,
+    getAllBookingByUserId: getAllBookingByUserId
 
 
 }

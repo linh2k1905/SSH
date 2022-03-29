@@ -674,6 +674,40 @@ let getAllComment = () => {
     }
     )
 }
+let getAllBookingByUserId = (data) => {
+
+    return new Promise(async (resolve, reject) => {
+        try {
+            let bookings = await db.Booking.findAll({
+                include: [
+                    { model: db.User, as: 'User', attributes: ['firstName', 'lastName', 'address', 'tel', 'email'] },
+                    {
+                        model: db.House,
+                        where: {
+                            idUser: data
+                        }
+                    }
+                ],
+
+
+
+                raw: true,
+                nest: true
+
+            })
+
+
+
+
+            resolve(bookings)
+
+
+        } catch (error) {
+            reject(error)
+        }
+    }
+    )
+}
 let handleDeleteBookingById = (idInput) => {
 
     return new Promise(async (resolve, reject) => {
@@ -852,5 +886,6 @@ module.exports = {
     handleEditBookingById: handleEditBookingById,
     getUserById: getUserById,
     getHouseByIdUser: getHouseByIdUser,
-    getHouseByMailUser: getHouseByMailUser
+    getHouseByMailUser: getHouseByMailUser,
+    getAllBookingByUserId: getAllBookingByUserId
 }

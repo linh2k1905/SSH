@@ -67,6 +67,14 @@ let postVerifyBooking = async (req, res) => {
     })
 
 }
+let postVerifyBookingFromOwner = async (req, res) => {
+
+    let booking = await bookingService.postVerifyBookingFromOwner(req.body);
+    return res.status(200).json({
+        data: booking
+    })
+
+}
 let postCancelVerifyBooking = async (req, res) => {
 
     let booking = await bookingService.postCancelVerifyBooking(req.body);
@@ -82,5 +90,6 @@ module.exports = {
     commentPost: commentPost,
     getAllBookingApointment: getAllBookingApointment,
     postVerifyBooking: postVerifyBooking,
-    postCancelVerifyBooking: postCancelVerifyBooking
+    postCancelVerifyBooking: postCancelVerifyBooking,
+    postVerifyBookingFromOwner: postVerifyBookingFromOwner
 }
