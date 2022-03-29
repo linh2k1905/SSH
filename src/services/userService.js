@@ -153,11 +153,10 @@ let createNewUser = (data) => {
                     roleId: data.roleId,
                     image: data.image
 
-
                 })
                 resolve({
                     errorCode: 0,
-                    messageCode: 'Create  New User'
+                    messageCode: 'Create  New User Success'
                 })
             }
 

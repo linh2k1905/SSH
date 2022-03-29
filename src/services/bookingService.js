@@ -7,12 +7,17 @@ const salt = bcrypt.genSaltSync(10);
 import moment from 'moment';
 require('dotenv').config();
 import { v4 as uuidv4 } from 'uuid';
+import localization from 'moment/locale/vi';
 let buildUrlEmail = (houseId, token) => {
     let result = `${process.env.URL_REACT}/verify-booking?token=${token}&bookingId=${houseId}`
     return result;
 }
+let buildUrlEmailCancel = (houseId, token) => {
+    let result = `${process.env.URL_REACT}/verify-cancel-booking?token=${token}&bookingId=${houseId}`
+    return result;
+}
 
-import localization from 'moment/locale/vi';
+
 
 let postBookingApointment = (data) => {
 
@@ -75,7 +80,8 @@ let postBookingApointment = (data) => {
                             address: data.address ? data.address : '',
                             time: data.time + " " + dateBooking,
                             ownerName: data.nameOwner ? data.nameOwner : '',
-                            linkRedirect: buildUrlEmail(data.idHouse, token)
+                            linkRedirect: buildUrlEmail(data.idHouse, token),
+                            linkRedirectCancel: buildUrlEmailCancel(data.idHouse, token)
                         })
 
                         resolve({
@@ -213,6 +219,49 @@ let getAllBookingApointment = (data) => {
     )
 }
 let postVerifyBooking = (data) => {
+    console.log(data);
+
+    return new Promise(async (resolve, reject) => {
+        try {
+
+            if (!data.token || !data.idBooking) {
+                resolve({
+                    errorCode: 0,
+                    errorMessage: "Missing parameter"
+                });
+            }
+            else {
+
+                let aBooking = await db.Booking.findOne({
+                    where: {
+                        idHouse: parseInt(data.idBooking),
+                        token: data.token,
+
+                    },
+                    raw: false
+                });
+                if (aBooking) {
+                    aBooking.status = "Đã Xác Nhận";
+                    await aBooking.save();
+
+                    resolve({
+                        errorCode: 0,
+                        errorMessage: 'Update success'
+                    });
+
+                }
+
+            }
+
+
+        } catch (error) {
+            reject(error)
+        }
+    }
+    )
+}
+
+let postCancelVerifyBooking = (data) => {
 
     return new Promise(async (resolve, reject) => {
         try {
@@ -235,7 +284,7 @@ let postVerifyBooking = (data) => {
                 });
                 console.log(aBooking);
                 if (aBooking) {
-                    aBooking.status = "Đã Xác Nhận";
+                    aBooking.status = "Đã Hủy Hẹn";
                     await aBooking.save();
 
                     resolve({
@@ -259,6 +308,6 @@ module.exports = {
     postBookingApointment: postBookingApointment,
     commentPost: commentPost,
     getAllBookingApointment: getAllBookingApointment,
-    postVerifyBooking: postVerifyBooking
-
+    postVerifyBooking: postVerifyBooking,
+    postCancelVerifyBooking: postCancelVerifyBooking,
 }

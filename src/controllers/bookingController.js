@@ -67,11 +67,20 @@ let postVerifyBooking = async (req, res) => {
     })
 
 }
+let postCancelVerifyBooking = async (req, res) => {
+
+    let booking = await bookingService.postCancelVerifyBooking(req.body);
+    return res.status(200).json({
+        data: booking
+    })
+
+}
 
 module.exports = {
 
     postBookingApointment: postBookingApointment,
     commentPost: commentPost,
     getAllBookingApointment: getAllBookingApointment,
-    postVerifyBooking: postVerifyBooking
+    postVerifyBooking: postVerifyBooking,
+    postCancelVerifyBooking: postCancelVerifyBooking
 }
