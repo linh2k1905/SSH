@@ -1,3 +1,4 @@
+import { use } from 'bcrypt/promises';
 import db from '../models/index'
 const { Op } = require('@sequelize/core');
 let getLastestHome = () => {
@@ -380,6 +381,13 @@ let getAllHomeMobile = () => {
                 raw: true,
                 nest: true,
             });
+            if (users) {
+                users.map((item, index) => {
+                    users[index].image = Buffer.from(item.image, 'base64').toString('binary');
+
+                })
+                console.log(users[0].image);
+            }
             resolve({
                 errorCode: 0,
                 data: users
