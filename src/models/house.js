@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
     area: DataTypes.INTEGER,
     descriptionVi: DataTypes.TEXT,
     descriptionEn: DataTypes.TEXT,
-    image: DataTypes.STRING,
+    image: DataTypes.BLOB,
     lang: DataTypes.STRING,
     lat: DataTypes.STRING,
   }, {

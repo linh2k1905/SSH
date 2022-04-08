@@ -32,7 +32,7 @@ module.exports = {
       },
 
       image: {
-        type: Sequelize.STRING
+        type: Sequelize.BLOB('long')
       },
       lang: {
         type: Sequelize.STRING

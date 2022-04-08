@@ -338,6 +338,7 @@ let getAllTypeHouseById = (id) => {
 
 
             });
+
             if (house && house.image)
                 house.image = Buffer.from(house.image, 'base64').toString('binary');
 
@@ -358,6 +359,43 @@ let getAllTypeHouseById = (id) => {
 
     })
 }
+
+
+
+let getAllHomeMobile = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let users = await db.House.findAll({
+
+                order: [['createdAt', 'ASC']],
+                attributes: {
+                    exclude: ['password']
+                },
+                include: [
+                    { model: db.HouseType },
+                    { model: db.City },
+                    { model: db.User, attributes: ['firstName', 'lastName', 'address', 'tel', 'image'] },
+
+                ],
+                raw: true,
+                nest: true,
+            });
+            resolve({
+                errorCode: 0,
+                data: users
+            });
+
+
+        } catch (error) {
+            reject({
+                errorCode: 1,
+                messageCode: ' Loi' + error
+            })
+        }
+
+
+    })
+}
 module.exports = {
 
     getLastestHome: getLastestHome,
@@ -365,6 +403,7 @@ module.exports = {
     getDetailHouse: getDetailHouse,
     deleteHouse: deleteHouse,
     getAllHome: getAllHome,
+    getAllHomeMobile: getAllHomeMobile,
     getFilterHouse: getFilterHouse,
     getFilterHouseFromHome: getFilterHouseFromHome,
     getAllTypeHouseById: getAllTypeHouseById

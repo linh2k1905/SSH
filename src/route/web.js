@@ -34,6 +34,7 @@ let initWebRoute = (app) => {
 
     router.get('/api/get-all-house', houseController.getListLatestHouse);
     router.get('/api/get-all-home', houseController.getListHouse);
+    router.get('/api/get-all-home-to-mobile', houseController.getListHouseMobile);
     router.get('/api/detail-house-by-id', houseController.getDetailHouseById);
     router.put('/api/edit-house-by-id', houseController.handleEditHouse);
     router.delete('/api/delete-house-by-id', houseController.handleDeleteHouse);

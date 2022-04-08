@@ -112,6 +112,25 @@ let getAllTypeHouseById = async (req, res) => {
 
 
 }
+
+
+let getListHouseMobile = async (req, res) => {
+
+
+
+    try {
+        let response = await houseSerVice.getAllHomeMobile();
+        return res.status(200).json(response);
+    } catch (error) {
+        console.log(error);
+        return res.status(200).json({
+            errorCode: -1,
+            message: 'Error from Server!!!'
+
+        })
+
+    }
+}
 module.exports = {
     getListLatestHouse: getListLatestHouse,
     handleEditHouse: handleEditHouse,
@@ -120,5 +139,6 @@ module.exports = {
     getListHouse: getListHouse,
     getFilterHouse: getFilterHouse,
     getFilterHouseFromHome: getFilterHouseFromHome,
-    getAllTypeHouseById: getAllTypeHouseById
+    getAllTypeHouseById: getAllTypeHouseById,
+    getListHouseMobile: getListHouseMobile
 }
