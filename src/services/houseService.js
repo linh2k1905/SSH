@@ -375,7 +375,7 @@ let getAllHomeMobile = () => {
                 include: [
                     { model: db.HouseType },
                     { model: db.City },
-                    { model: db.User, attributes: ['firstName', 'lastName', 'address', 'tel', 'image'] },
+                    { model: db.User, attributes: ['firstName', 'lastName', 'address', 'tel', 'image', 'email'] },
 
                 ],
                 raw: true,
@@ -386,7 +386,7 @@ let getAllHomeMobile = () => {
                     users[index].image = Buffer.from(item.image, 'base64').toString('binary');
 
                 })
-                console.log(users[0].image);
+
             }
             resolve({
                 errorCode: 0,
