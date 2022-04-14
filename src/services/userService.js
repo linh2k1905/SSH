@@ -49,6 +49,54 @@ let handleUserLogin = (email, password) => {
     })
 }
 
+let handleUserLoginFromMobile = (email, password) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+
+            let isExist = await checkEmailUser(email);
+
+            let userData = {};
+            if (isExist) {
+                let user = await db.User.findOne({
+
+                    where: {
+                        email: email,
+                    },
+                    raw: false
+                });
+                if (user) {
+                    console.log(user.image);
+                    user.image = Buffer.from(user.image, 'base64').toString('binary');
+
+                    let rlt = await bcrypt.compareSync(password, user.password);
+                    if (rlt) {
+                        userData.errorCode = 0;
+                        userData.messageCode = 'login success';
+                        userData.user = user;
+
+                    }
+                    else {
+                        userData.errorCode = 2;
+                        userData.messageCode = 'wrong password';
+                    }
+
+                }
+
+            }
+            else {
+                userData.errorCode = 1;
+                userData.messageCode = 'wrong email';
+
+
+            }
+
+            resolve(userData);
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
 let checkEmailUser = (mail) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -887,5 +935,6 @@ module.exports = {
     getUserById: getUserById,
     getHouseByIdUser: getHouseByIdUser,
     getHouseByMailUser: getHouseByMailUser,
-    getAllBookingByUserId: getAllBookingByUserId
+    getAllBookingByUserId: getAllBookingByUserId,
+    handleUserLoginFromMobile: handleUserLoginFromMobile
 }

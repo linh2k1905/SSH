@@ -299,6 +299,25 @@ let handleEditBookingById = async (req, res) => {
 
 
 }
+let handleLoginFromMobile = async (req, res) => {
+    let email = req.body.email;
+    let password = req.body.password;
+    if (!email || !password) {
+        return res.status(500).json({
+            errorCode: 1,
+            messageCode: 'not empty input',
+
+
+        })
+    }
+    let userData = await userService.handleUserLoginFromMobile(email, password)
+    return res.status(200).json({
+        error: userData.errorCode,
+        messageCode: userData.messageCode,
+        userdata: userData.user ? userData.user : { 'user': 'user not found' },
+    })
+
+}
 module.exports = {
     handleLogin: handleLogin,
     handleGetAllUsers: handleGetAllUsers,
@@ -324,7 +343,8 @@ module.exports = {
     getUserById: getUserById,
     getHouseByIdUser: getHouseByIdUser,
     getHouseByMailUser: getHouseByMailUser,
-    getAllBookingByUserId: getAllBookingByUserId
+    getAllBookingByUserId: getAllBookingByUserId,
+    handleLoginFromMobile: handleLoginFromMobile
 
 
 }
