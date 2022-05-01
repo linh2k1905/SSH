@@ -1,5 +1,4 @@
 {
-  "type": "module",
   "name": "boarding-house",
   "version": "1.0.0",
   "description": "Truong Thao Linh",
@@ -28,6 +27,7 @@
     "moment": "^2.29.1",
     "mysql": "file:..",
     "mysql2": "^2.2.5",
+    "node-fetch": "^2.6.7",
     "nodemailer": "6.6.3"
   },
   "devDependencies": {

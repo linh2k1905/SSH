@@ -1,8 +1,7 @@
 
 import db from '../models/index'
 import bcrypt from 'bcryptjs'
-import { raw } from 'body-parser';
-import { reject } from 'bcrypt/promises';
+import fetch from 'node-fetch';
 const salt = bcrypt.genSaltSync(10);
 let handleUserLogin = (email, password) => {
     return new Promise(async (resolve, reject) => {
@@ -247,32 +246,54 @@ let createNewCity = (data) => {
 
 
 }
-let createNewPost = (data) => {
+let createNewPost = (dataInput) => {
     return new Promise(async (resolve, reject) => {
         try {
+            console.log(dataInput);
+            if (dataInput.address) {
+                let url = "https://nominatim.openstreetmap.org/search?format=json&q=" + encodeURIComponent(dataInput.address)
+                console.log(url);
+                if (dataInput) {
+                    fetch(url)
+                        .then(
 
-            await db.House.create({
-                name: data.name,
-                idUser: data.userId,
-                idCity: data.cityId,
-                idTypeHouse: data.typeHouseId,
-                price: data.price,
-                address: data.address,
-                image: data.image,
-                area: data.area,
-                lat: data.lat,
-                lang: data.lang,
-                descriptionEn: data.descEn,
-                descriptionVi: data.descVi
+                            async res => {
+                                let data = await res.json();
+                                console.log(data);
+                                if (data) {
+
+                                    console.log(data[0]);
+                                    let lang = data[0].lon ? data[0].lon : data[1].lon;
+                                    let lat = data[0].lat ? data[0].lat : data[1].lat;
+                                    await db.House.create({
+                                        name: dataInput.name,
+                                        idUser: dataInput.userId,
+                                        idCity: dataInput.cityId,
+                                        idTypeHouse: dataInput.typeHouseId,
+                                        price: dataInput.price,
+                                        address: dataInput.address,
+                                        image: dataInput.image,
+                                        area: dataInput.area,
+                                        lat: lat ? lat : '0',
+                                        lang: lang ? lang : '0',
+                                        descriptionEn: dataInput.descEn,
+                                        descriptionVi: dataInput.descVi
 
 
-            })
-            resolve({
-                errorCode: 0,
-                messageCode: 'Create  New Post'
-            })
+                                    })
+
+                                }
+                            }).catch(e => console.log(e));
 
 
+                }
+
+                resolve({
+                    errorCode: 0,
+                    messageCode: 'Create  New Post'
+                })
+
+            }
 
         } catch (error) {
             reject(error);
