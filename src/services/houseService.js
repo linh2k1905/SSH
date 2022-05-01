@@ -14,7 +14,7 @@ let getLastestHome = () => {
                 include: [
                     { model: db.HouseType },
                     { model: db.City },
-                    { model: db.User, attributes: ['firstName', 'lastName', 'address', 'tel', 'image'] },
+                    { model: db.User, attributes: ['firstName', 'lastName', 'address', 'tel', 'image', 'email'] },
 
                 ],
                 raw: true,
@@ -330,7 +330,7 @@ let getAllTypeHouseById = (id) => {
 
                     },
                     { model: db.City, attributes: ['name'] },
-                    { model: db.User, as: 'User', attributes: ['id', 'firstName', 'lastName', 'address', 'tel', 'image'] },
+                    { model: db.User, as: 'User', attributes: ['id', 'firstName', 'lastName', 'address', 'tel', 'image', 'email'] },
 
                 ],
                 raw: true,
