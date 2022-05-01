@@ -62,9 +62,9 @@ let postBookingApointment = (data) => {
                             },
                             defaults: {
                                 idUser: users[0].id,
-                                idHouse: dataInput.idHouse,
-                                time: dataInput.time,
-                                date: dataInput.date,
+                                idHouse: data.idHouse,
+                                time: data.time,
+                                date: data.date,
                                 description: data.desc,
                                 token: token,
                                 status: 'Đang được xử lý'
