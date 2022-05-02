@@ -433,7 +433,7 @@ let getFilterHouseFromHomeMobile = (data) => {
 
                     },
                     { model: db.City },
-                    { model: db.User, as: 'User', attributes: ['firstName', 'lastName', 'address', 'tel', 'image'] },
+                    { model: db.User, as: 'User', attributes: ['id', 'firstName', 'lastName', 'address', 'tel', 'email'] },
 
                 ],
                 raw: true,
