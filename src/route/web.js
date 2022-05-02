@@ -32,7 +32,7 @@ let initWebRoute = (app) => {
     router.get('/api/getTypeHouse', userController.handleGetTypeHouse);
     router.get('/api/get-info-booking', userController.handleGetInfoBooking);
     router.get('/api/top-owner-home', ownerController.getTopOwnertoHome);
-
+    router.get('/api/get-filter-house-from-home-mobile', houseController.getFilterHouseFromHomeMobile);
     router.get('/api/get-all-house', houseController.getListLatestHouse);
     router.get('/api/get-all-home', houseController.getListHouse);
     router.get('/api/get-all-home-to-mobile', houseController.getListHouseMobile);

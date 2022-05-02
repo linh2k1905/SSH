@@ -6,7 +6,8 @@ import cors from 'cors'
 require('dotenv').config()
 let app = express();
 app.use(cors({
-    origin: true
+    origin: true,
+    credentials: false
 }));
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }))

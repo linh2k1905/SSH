@@ -14,7 +14,7 @@ let getLastestHome = () => {
                 include: [
                     { model: db.HouseType },
                     { model: db.City },
-                    { model: db.User, attributes: ['firstName', 'lastName', 'address', 'tel', 'image', 'email'] },
+                    { model: db.User, attributes: ['firstName', 'lastName', 'address', 'tel', 'image', 'email', 'id'] },
 
                 ],
                 raw: true,
@@ -52,7 +52,7 @@ let getAllHome = () => {
                 include: [
                     { model: db.HouseType },
                     { model: db.City },
-                    { model: db.User, attributes: ['firstName', 'lastName', 'address', 'tel', 'image'] },
+                    { model: db.User, attributes: ['firstName', 'lastName', 'address', 'tel', 'id', 'image'] },
 
                 ],
                 raw: true,
@@ -375,7 +375,7 @@ let getAllHomeMobile = () => {
                 include: [
                     { model: db.HouseType },
                     { model: db.City },
-                    { model: db.User, attributes: ['firstName', 'lastName', 'address', 'tel', 'image', 'email'] },
+                    { model: db.User, attributes: ['firstName', 'lastName', 'address', 'tel', 'image', 'email', 'id'] },
 
                 ],
                 raw: true,
@@ -404,6 +404,70 @@ let getAllHomeMobile = () => {
 
     })
 }
+let getFilterHouseFromHomeMobile = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let house = await db.House.findAll({
+                where: {
+                    idCity: parseInt(data.idCity),
+                    idTypeHouse: parseInt(data.idTypeHouse),
+                    price: {
+                        [Op.lte]: parseInt(data.price) * 1000000,
+
+
+                    },
+                    area: {
+
+                        [Op.lte]: parseInt(data.area),
+
+
+                    },
+
+
+
+
+                },
+                include: [
+                    {
+                        model: db.HouseType,
+
+                    },
+                    { model: db.City },
+                    { model: db.User, as: 'User', attributes: ['firstName', 'lastName', 'address', 'tel', 'image'] },
+
+                ],
+                raw: true,
+                nest: true
+
+
+
+
+
+            });
+            if (house) {
+                house.map((item, index) => {
+                    house[index].image = Buffer.from(item.image, 'base64').toString('binary');
+
+                })
+
+            }
+
+            resolve({
+                errorCode: 0,
+                data: house
+            });
+
+
+        } catch (error) {
+            reject({
+                errorCode: 1,
+                messageCode: ' Loi' + error
+            })
+        }
+
+
+    })
+}
 module.exports = {
 
     getLastestHome: getLastestHome,
@@ -414,5 +478,6 @@ module.exports = {
     getAllHomeMobile: getAllHomeMobile,
     getFilterHouse: getFilterHouse,
     getFilterHouseFromHome: getFilterHouseFromHome,
-    getAllTypeHouseById: getAllTypeHouseById
+    getAllTypeHouseById: getAllTypeHouseById,
+    getFilterHouseFromHomeMobile: getFilterHouseFromHomeMobile
 }

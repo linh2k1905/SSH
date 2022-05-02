@@ -102,7 +102,7 @@ let getScheduleOwner = (id, date) => {
                 include: [
                     {
                         model: db.User, attributes: {
-                            exclude: ['password']
+                            exclude: ['password', 'image']
                         },
                     }
                 ],
