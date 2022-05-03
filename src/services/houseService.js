@@ -317,6 +317,40 @@ let getFilterHouseFromHome = (data) => {
 
     })
 }
+let getListHouseByCity = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let house = await db.House.findAll({
+                where: {
+                    idCity: parseInt(data.idCity),
+                },
+                include: [
+                    {
+                        model: db.HouseType,
+
+                    },
+                    { model: db.City },
+                    { model: db.User, as: 'User', attributes: ['firstName', 'lastName', 'address', 'tel', 'image'] },
+
+                ],
+                raw: true,
+                nest: true
+            });
+            resolve({
+                errorCode: 0,
+                data: house
+            });
+
+        } catch (error) {
+            reject({
+                errorCode: 1,
+                messageCode: ' Loi' + error
+            })
+        }
+
+
+    })
+}
 
 let getAllTypeHouseById = (id) => {
     return new Promise(async (resolve, reject) => {
@@ -479,5 +513,6 @@ module.exports = {
     getFilterHouse: getFilterHouse,
     getFilterHouseFromHome: getFilterHouseFromHome,
     getAllTypeHouseById: getAllTypeHouseById,
-    getFilterHouseFromHomeMobile: getFilterHouseFromHomeMobile
+    getFilterHouseFromHomeMobile: getFilterHouseFromHomeMobile,
+    getListHouseByCity: getListHouseByCity
 }
