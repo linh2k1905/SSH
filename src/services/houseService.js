@@ -52,7 +52,7 @@ let getAllHome = () => {
                 include: [
                     { model: db.HouseType },
                     { model: db.City },
-                    { model: db.User, attributes: ['firstName', 'lastName', 'address', 'tel', 'id', 'image'] },
+                    { model: db.User, attributes: ['firstName', 'lastName', 'address', 'tel', 'id', 'image', 'email'] },
 
                 ],
                 raw: true,

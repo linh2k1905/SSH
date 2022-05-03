@@ -249,20 +249,19 @@ let createNewCity = (data) => {
 let createNewPost = (dataInput) => {
     return new Promise(async (resolve, reject) => {
         try {
-            console.log(dataInput);
+
             if (dataInput.address) {
                 let url = "https://nominatim.openstreetmap.org/search?format=json&q=" + encodeURIComponent(dataInput.address)
-                console.log(url);
+
                 if (dataInput) {
                     fetch(url)
                         .then(
 
                             async res => {
                                 let data = await res.json();
-                                console.log(data);
+
                                 if (data) {
 
-                                    console.log(data[0]);
                                     let lang = data[0].lon ? data[0].lon : data[1].lon;
                                     let lat = data[0].lat ? data[0].lat : data[1].lat;
                                     await db.House.create({
