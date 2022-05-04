@@ -259,38 +259,50 @@ let createNewPost = (dataInput) => {
 
                             async res => {
                                 let data = await res.json();
-
                                 if (data) {
+                                    if (data.length === 0) {
+                                        resolve({
+                                            errorCode: -1,
+                                            messageCode: 'Địa chỉ không phù hợp'
+                                        })
+                                    }
+                                    else {
+                                        let lang = data[0].lon ? data[0].lon : data[1].lon;
+                                        let lat = data[0].lat ? data[0].lat : data[1].lat;
 
-                                    let lang = data[0].lon ? data[0].lon : data[1].lon;
-                                    let lat = data[0].lat ? data[0].lat : data[1].lat;
-                                    await db.House.create({
-                                        name: dataInput.name,
-                                        idUser: dataInput.userId,
-                                        idCity: dataInput.cityId,
-                                        idTypeHouse: dataInput.typeHouseId,
-                                        price: dataInput.price,
-                                        address: dataInput.address,
-                                        image: dataInput.image,
-                                        area: dataInput.area,
-                                        lat: lat ? lat : '0',
-                                        lang: lang ? lang : '0',
-                                        descriptionEn: dataInput.descEn,
-                                        descriptionVi: dataInput.descVi
+                                        await db.House.create({
+                                            name: dataInput.name,
+                                            idUser: dataInput.userId,
+                                            idCity: dataInput.cityId,
+                                            idTypeHouse: dataInput.typeHouseId,
+                                            price: dataInput.price,
+                                            address: dataInput.address,
+                                            image: dataInput.image,
+                                            area: dataInput.area,
+                                            lat: lat ? lat : '0',
+                                            lang: lang ? lang : '0',
+                                            descriptionEn: dataInput.descEn,
+                                            descriptionVi: dataInput.descVi
 
 
-                                    })
+                                        });
+                                        resolve({
+                                            errorCode: 0,
+                                            messageCode: 'Đăng thành công'
+                                        })
 
+
+
+
+                                    }
                                 }
+
                             }).catch(e => console.log(e));
 
 
                 }
 
-                resolve({
-                    errorCode: 0,
-                    messageCode: 'Create  New Post'
-                })
+
 
             }
 

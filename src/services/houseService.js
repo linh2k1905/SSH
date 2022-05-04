@@ -202,7 +202,7 @@ let getFilterHouse = (data) => {
 
                         },
                         { model: db.City },
-                        { model: db.User, as: 'User', attributes: ['firstName', 'lastName', 'address', 'tel', 'image'] },
+                        { model: db.User, as: 'User', attributes: ['firstName', 'lastName', 'address', 'tel', 'email'] },
 
                     ],
                     raw: true,
@@ -286,7 +286,7 @@ let getFilterHouseFromHome = (data) => {
 
                     },
                     { model: db.City },
-                    { model: db.User, as: 'User', attributes: ['firstName', 'lastName', 'address', 'tel', 'image'] },
+                    { model: db.User, as: 'User', attributes: ['firstName', 'lastName', 'address', 'tel', 'image', 'email'] },
 
                 ],
                 raw: true,
@@ -330,7 +330,7 @@ let getListHouseByCity = (data) => {
 
                     },
                     { model: db.City },
-                    { model: db.User, as: 'User', attributes: ['firstName', 'lastName', 'address', 'tel', 'image'] },
+                    { model: db.User, as: 'User', attributes: ['firstName', 'lastName', 'address', 'tel', 'image', 'email'] },
 
                 ],
                 raw: true,
