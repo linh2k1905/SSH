@@ -12,6 +12,9 @@ module.exports = {
       name: {
         type: Sequelize.STRING
       },
+      nameVi: {
+        type: Sequelize.STRING
+      },
 
       createdAt: {
         allowNull: false,

@@ -31,6 +31,7 @@ module.exports = (sequelize, DataTypes) => {
     image: DataTypes.BLOB,
     lang: DataTypes.STRING,
     lat: DataTypes.STRING,
+    status: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'House',

@@ -21,6 +21,26 @@ let postBookingApointment = async (req, res) => {
     })
 
 }
+let postBookingApointmentWithoutPass = async (req, res) => {
+    let data = req.body;
+    console.log(data);
+
+
+    if (!data) {
+        return res.status(200).json({
+            errorCode: 1,
+            messageCode: " Missing input",
+            users: []
+        })
+    }
+    let booking = await bookingService.postBookingApointmentWithoutPass(data);
+    return res.status(200).json({
+        errorCode: 0,
+        errMessage: "ok",
+        data: booking
+    })
+
+}
 let commentPost = async (req, res) => {
     let data = req.body;
 
@@ -87,6 +107,7 @@ let postCancelVerifyBooking = async (req, res) => {
 module.exports = {
 
     postBookingApointment: postBookingApointment,
+    postBookingApointmentWithoutPass: postBookingApointmentWithoutPass,
     commentPost: commentPost,
     getAllBookingApointment: getAllBookingApointment,
     postVerifyBooking: postVerifyBooking,

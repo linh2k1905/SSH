@@ -47,6 +47,13 @@ let getDetailHouseById = async (req, res) => {
 
 
 }
+let getBlockUserHasPostUnvailable = async (req, res) => {
+    let q = req.body;
+    let message = await houseSerVice.getBlockUserHasPostUnvailable(q);
+    return res.status(200).json(message);
+
+
+}
 let handleDeleteHouse = async (req, res) => {
     if (!req.body.id) {
         return res.status(200).json({
@@ -174,5 +181,6 @@ module.exports = {
     getAllTypeHouseById: getAllTypeHouseById,
     getListHouseMobile: getListHouseMobile,
     getFilterHouseFromHomeMobile: getFilterHouseFromHomeMobile,
-    getListHouseByCity: getListHouseByCity
+    getListHouseByCity: getListHouseByCity,
+    getBlockUserHasPostUnvailable: getBlockUserHasPostUnvailable
 }

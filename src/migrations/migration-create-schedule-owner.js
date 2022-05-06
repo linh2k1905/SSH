@@ -19,11 +19,6 @@ module.exports = {
       time: {
         type: Sequelize.STRING
       },
-      currrentNumber: {
-        type: Sequelize.INTEGER,
-        default: 0
-      },
-
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

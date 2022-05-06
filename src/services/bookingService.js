@@ -8,6 +8,7 @@ import moment from 'moment';
 require('dotenv').config();
 import { v4 as uuidv4 } from 'uuid';
 import localization from 'moment/locale/vi';
+import { USER_ROLE } from './../config/constant'
 let buildUrlEmail = (houseId, token) => {
     let result = `${process.env.URL_REACT}/verify-booking?token=${token}&bookingId=${houseId}`
     return result;
@@ -43,7 +44,7 @@ let postBookingApointment = (data) => {
                     },
                     defaults: {
                         email: data.email,
-                        roleId: 4,
+                        roleId: USER_ROLE.USER,
                         tel: data.tel,
                         password: hashUserPasswordFromBcrypt,
                     }
@@ -101,6 +102,88 @@ let postBookingApointment = (data) => {
 
 
             }
+
+        } catch (error) {
+            reject(error)
+        }
+    }
+    )
+}
+let postBookingApointmentWithoutPass = (data) => {
+
+    return new Promise(async (resolve, reject) => {
+        try {
+            let users = '';
+            if (!data.email || !data.idHouse || !data.time || !data.date) {
+                resolve({
+                    errorCode: 0,
+                    errorMessage: "Missing parameter"
+                });
+            }
+
+            else {
+
+
+
+
+                let token = uuidv4();
+                users = await db.User.findOne({
+                    where: {
+                        email: data.email
+                    },
+                    attributes: {
+                        exclude: ['password', 'image']
+                    },
+
+                })
+                if (users) {
+                    console.log(users);
+
+                    await db.Booking.findOrCreate({
+                        where: {
+                            idUser: users.id,
+                            idHouse: data.idHouse,
+                            time: data.time,
+                            date: data.date,
+                            token: token
+                        },
+                        defaults: {
+                            idUser: users.id,
+                            idHouse: data.idHouse,
+                            time: data.time,
+                            date: data.date,
+                            description: data.desc,
+                            token: token,
+                            status: 'Đang được xử lý'
+
+                        }
+
+
+                    })
+                    let dateBooking = moment(new Date(parseInt(data.date))).format('DD/MM/YYYY')
+                    await sendSimpleEmail({
+                        recieverEmail: data.email,
+                        name: data.name ? data.name : ' ',
+                        address: data.address ? data.address : '',
+                        time: data.time + " " + dateBooking,
+                        ownerName: data.nameOwner ? data.nameOwner : '',
+                        linkRedirect: buildUrlEmail(data.idHouse, token),
+                        linkRedirectCancel: buildUrlEmailCancel(data.idHouse, token)
+                    })
+
+                    resolve({
+                        errorCode: 0,
+                        errorMessage: "Create success",
+                        users: users
+                    })
+
+                }
+
+
+            }
+
+
+
 
         } catch (error) {
             reject(error)
@@ -349,6 +432,7 @@ let postCancelVerifyBooking = (data) => {
 module.exports = {
 
     postBookingApointment: postBookingApointment,
+    postBookingApointmentWithoutPass: postBookingApointmentWithoutPass,
     commentPost: commentPost,
     getAllBookingApointment: getAllBookingApointment,
     postVerifyBooking: postVerifyBooking,

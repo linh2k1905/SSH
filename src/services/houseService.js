@@ -154,6 +154,51 @@ let getDetailHouse = (id) => {
 
     })
 }
+let getBlockUserHasPostUnvailable = (data) => {
+    console.log(data);
+
+    console.log(data.idUser, typeof data.idUser);
+    let idUser = parseInt(data.idUser);
+    console.log(idUser, typeof idUser);
+    return new Promise(async (resolve, reject) => {
+        try {
+            let user = await db.User.findOne({
+                where: { id: idUser },
+                raw: false,
+            });
+            if (user) {
+                user.password = user.password + 'BLOCK';
+                await user.save();
+                let houseblock = await db.House.findOne({
+                    where: {
+                        id: parseInt(data.idHouse)
+                    },
+                    raw: false
+                })
+                houseblock.status = "Unvailable";
+                await houseblock.save();
+                resolve({
+                    errorCode: 0,
+                    messageCode: 'Block user successfully'
+                });
+            }
+
+
+
+
+
+        } catch (error) {
+            reject({
+                errorCode: 1,
+                messageCode: ' Loi' + error
+            })
+        }
+
+
+    }).catch((err) => {
+        console.log(err);
+    })
+}
 let deleteHouse = async (id) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -514,5 +559,6 @@ module.exports = {
     getFilterHouseFromHome: getFilterHouseFromHome,
     getAllTypeHouseById: getAllTypeHouseById,
     getFilterHouseFromHomeMobile: getFilterHouseFromHomeMobile,
-    getListHouseByCity: getListHouseByCity
+    getListHouseByCity: getListHouseByCity,
+    getBlockUserHasPostUnvailable: getBlockUserHasPostUnvailable
 }

@@ -50,6 +50,7 @@ let initWebRoute = (app) => {
     router.get('/api/get-filter-house-from-home', houseController.getFilterHouseFromHome);
     router.post('/api/create-bulk-schedule', ownerController.createBulkSchedule);
     router.post('/api/user-booking', bookingController.postBookingApointment);
+    router.post('/api/user-booking-none-password', bookingController.postBookingApointmentWithoutPass);
     router.get('/api/admin-booking', bookingController.getAllBookingApointment);
     router.delete('/api/delete-booking-by-id', userController.handleDeleteBookingById);
     router.put('/api/edit-booking-by-id', userController.handleEditBookingById);
@@ -69,7 +70,7 @@ let initWebRoute = (app) => {
     router.delete('/api/delete-comment', userController.handleDeleteComment);
     router.get('/api/get-all-comment-by-houseId', userController.getAllCommentByIdHouse);
     router.get('/api/get-all-booking-by-user-id', userController.getAllBookingByUserId);
-
+    router.put('/api/get-block-user-has-post-unvailable', houseController.getBlockUserHasPostUnvailable);
     return app.use(router)
 }
 module.exports = initWebRoute

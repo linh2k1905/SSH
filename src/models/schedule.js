@@ -15,7 +15,6 @@ module.exports = (sequelize, DataTypes) => {
         idOwner: DataTypes.INTEGER,
         time: DataTypes.STRING,
         date: DataTypes.STRING,
-        currrentNumber: DataTypes.INTEGER
     }, {
         sequelize,
         modelName: 'Schedule',

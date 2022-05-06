@@ -18,13 +18,21 @@ module.exports = {
       idCity: {
         type: Sequelize.INTEGER
       },
+      idTypeHouse: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      }
+      ,
       address: {
         type: Sequelize.STRING
       },
       price: {
         type: Sequelize.FLOAT
       },
-      description: {
+      descriptionEn: {
+        type: Sequelize.TEXT
+      },
+      descriptionVi: {
         type: Sequelize.TEXT
       },
       area: {
@@ -39,6 +47,10 @@ module.exports = {
       },
       lat: {
         type: Sequelize.STRING
+      },
+      status: {
+        type: Sequelize.STRING,
+        defaultValue: "OK",
       },
 
       createdAt: {
