@@ -1,16 +1,16 @@
 import { use } from 'bcrypt/promises';
 import db from '../models/index'
 const { Op } = require('@sequelize/core');
+import { STATUS } from '../../src/config/constant'
 let getLastestHome = () => {
     return new Promise(async (resolve, reject) => {
         try {
             let users = await db.House.findAll({
-
+                where: {
+                    status: STATUS.STATUS_OK
+                },
                 order: [['createdAt', 'ASC']],
                 limit: 5,
-                attributes: {
-                    exclude: ['password']
-                },
                 include: [
                     { model: db.HouseType },
                     { model: db.City },
@@ -46,9 +46,6 @@ let getAllHome = () => {
             let users = await db.House.findAll({
 
                 order: [['createdAt', 'ASC']],
-                attributes: {
-                    exclude: ['password']
-                },
                 include: [
                     { model: db.HouseType },
                     { model: db.City },
@@ -307,6 +304,7 @@ let getFilterHouseFromHome = (data) => {
         try {
             let house = await db.House.findAll({
                 where: {
+                    status: STATUS.STATUS_OK,
                     idCity: parseInt(data.idCity),
                     idTypeHouse: parseInt(data.idTypeHouse),
                     price: {
@@ -368,6 +366,7 @@ let getListHouseByCity = (data) => {
             let house = await db.House.findAll({
                 where: {
                     idCity: parseInt(data.idCity),
+                    status: STATUS.STATUS_OK,
                 },
                 include: [
                     {
@@ -401,7 +400,10 @@ let getAllTypeHouseById = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
             let house = await db.House.findAll({
-                where: { idTypeHouse: id },
+                where: {
+                    idTypeHouse: id,
+                    status: STATUS.STATUS_OK,
+                },
 
                 include: [
                     {
@@ -446,11 +448,10 @@ let getAllHomeMobile = () => {
     return new Promise(async (resolve, reject) => {
         try {
             let users = await db.House.findAll({
-
-                order: [['createdAt', 'ASC']],
-                attributes: {
-                    exclude: ['password']
+                where: {
+                    status: STATUS.STATUS_OK,
                 },
+                order: [['createdAt', 'ASC']],
                 include: [
                     { model: db.HouseType },
                     { model: db.City },
@@ -483,11 +484,13 @@ let getAllHomeMobile = () => {
 
     })
 }
+
 let getFilterHouseFromHomeMobile = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
             let house = await db.House.findAll({
                 where: {
+                    status: STATUS.STATUS_OK,
                     idCity: parseInt(data.idCity),
                     idTypeHouse: parseInt(data.idTypeHouse),
                     price: {
