@@ -362,6 +362,7 @@ let postVerifyBookingFromOwner = (data) => {
                     where: {
                         idHouse: parseInt(data.idBooking),
                         token: data.token,
+                        status: "Đã xác nhận"
 
                     },
                     raw: false
@@ -404,6 +405,10 @@ let postCancelVerifyBooking = (data) => {
                     where: {
                         idHouse: parseInt(data.idBooking),
                         token: data.token,
+                        [Op.or]: {
+                            status: "Đã Đồng Ý Hẹn",
+                            status: "Đã Xác Nhận"
+                        }
 
                     },
                     raw: false
