@@ -2,6 +2,7 @@
 import db from '../models/index'
 import bcrypt from 'bcryptjs'
 import fetch from 'node-fetch';
+import { STATUS } from '../config/constant';
 const salt = bcrypt.genSaltSync(10);
 let handleUserLogin = (email, password) => {
     return new Promise(async (resolve, reject) => {
@@ -538,8 +539,6 @@ let handleCreateNewComment = (data) => {
                 userId: data.userId,
                 houseId: data.houseId,
                 content: data.content,
-
-
 
 
             })
