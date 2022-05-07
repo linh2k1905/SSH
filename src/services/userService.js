@@ -3,6 +3,7 @@ import db from '../models/index'
 import bcrypt from 'bcryptjs'
 import fetch from 'node-fetch';
 import { STATUS } from '../config/constant';
+import { concat } from 'lodash';
 const salt = bcrypt.genSaltSync(10);
 let handleUserLogin = (email, password) => {
     return new Promise(async (resolve, reject) => {
@@ -65,7 +66,6 @@ let handleUserLoginFromMobile = (email, password) => {
                     raw: false
                 });
                 if (user) {
-                    console.log(user.image);
                     user.image = Buffer.from(user.image, 'base64').toString('binary');
 
                     let rlt = await bcrypt.compareSync(password, user.password);

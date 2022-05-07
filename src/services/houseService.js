@@ -152,11 +152,9 @@ let getDetailHouse = (id) => {
     })
 }
 let getBlockUserHasPostUnvailable = (data) => {
-    console.log(data);
 
-    console.log(data.idUser, typeof data.idUser);
     let idUser = parseInt(data.idUser);
-    console.log(idUser, typeof idUser);
+
     return new Promise(async (resolve, reject) => {
         try {
             let user = await db.User.findOne({
@@ -361,6 +359,7 @@ let getFilterHouseFromHome = (data) => {
     })
 }
 let getListHouseByCity = (data) => {
+    console.log(data);
     return new Promise(async (resolve, reject) => {
         try {
             let house = await db.House.findAll({
@@ -374,7 +373,7 @@ let getListHouseByCity = (data) => {
 
                     },
                     { model: db.City },
-                    { model: db.User, as: 'User', attributes: ['firstName', 'lastName', 'address', 'tel', 'image', 'email'] },
+                    { model: db.User, as: 'User', attributes: ['firstName', 'lastName', 'address', 'tel', 'image', 'email', 'id'] },
 
                 ],
                 raw: true,
