@@ -2,9 +2,17 @@
 import db from '../models/index'
 import bcrypt from 'bcryptjs'
 import fetch from 'node-fetch';
-import { STATUS } from '../config/constant';
-import { concat } from 'lodash';
+import { sendSimpleEmailChangeTime } from './emailService';
+import moment from 'moment';
 const salt = bcrypt.genSaltSync(10);
+let buildUrlEmail = (houseId, token) => {
+    let result = `${process.env.URL_REACT}/verify-booking?token=${token}&bookingId=${houseId}`
+    return result;
+}
+let buildUrlEmailCancel = (houseId, token) => {
+    let result = `${process.env.URL_REACT}/verify-cancel-booking?token=${token}&bookingId=${houseId}`
+    return result;
+}
 let handleUserLogin = (email, password) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -24,13 +32,13 @@ let handleUserLogin = (email, password) => {
                     let rlt = await bcrypt.compareSync(password, user.password);
                     if (rlt) {
                         userData.errorCode = 0;
-                        userData.messageCode = 'login success';
+                        userData.messageCode = 'Đăng nhập thành công';
                         userData.user = user;
 
                     }
                     else {
                         userData.errorCode = 2;
-                        userData.messageCode = 'wrong password';
+                        userData.messageCode = 'Sai Mật Khẩu';
                     }
 
                 }
@@ -38,7 +46,7 @@ let handleUserLogin = (email, password) => {
             }
             else {
                 userData.errorCode = 1;
-                userData.messageCode = 'wrong email';
+                userData.messageCode = 'Sai địa chỉ email';
 
 
             }
@@ -71,13 +79,13 @@ let handleUserLoginFromMobile = (email, password) => {
                     let rlt = await bcrypt.compareSync(password, user.password);
                     if (rlt) {
                         userData.errorCode = 0;
-                        userData.messageCode = 'login success';
+                        userData.messageCode = 'Đăng nhập thành công';
                         userData.user = user;
 
                     }
                     else {
                         userData.errorCode = 2;
-                        userData.messageCode = 'wrong password';
+                        userData.messageCode = 'Sai mật khẩu';
                     }
 
                 }
@@ -85,7 +93,7 @@ let handleUserLoginFromMobile = (email, password) => {
             }
             else {
                 userData.errorCode = 1;
-                userData.messageCode = 'wrong email';
+                userData.messageCode = 'Sai địa chỉ email';
 
 
             }
@@ -204,7 +212,7 @@ let createNewUser = (data) => {
                 })
                 resolve({
                     errorCode: 0,
-                    messageCode: 'Create  New User Success'
+                    messageCode: 'Tạo người dùng thành công'
                 })
             }
 
@@ -339,7 +347,7 @@ let deleteUser = async (id) => {
             if (!user) {
                 resolve({
                     errorCode: 2,
-                    messageCode: 'User not found'
+                    messageCode: 'Không tìm thấy người dùng'
                 })
             }
 
@@ -348,7 +356,7 @@ let deleteUser = async (id) => {
             });
             resolve({
                 errorCode: 0,
-                messageCode: 'The user is deleted'
+                messageCode: 'Đã xóa người dùng thành công'
             })
         }
 
@@ -366,7 +374,7 @@ let editUser = async (data) => {
             if (!data.id || !data.roleId) {
                 resolve({
                     errorCode: 2,
-                    messageCode: "Missing input"
+                    messageCode: "Vui lòng điền đủ thông tin"
                 })
             }
             let user = await db.User.findOne({
@@ -388,7 +396,7 @@ let editUser = async (data) => {
                 await user.save();
                 resolve({
                     errorCode: 0,
-                    messageCode: 'Update successfully'
+                    messageCode: 'Cập nhật thành công'
                 })
 
 
@@ -414,7 +422,7 @@ let getRoleUser = () => {
         } catch (error) {
             reject({
                 errorCode: 1,
-                messageCode: ' Khong tim thay vai tro'
+                messageCode: 'Không tìm thấy dữ liệu'
             })
         }
 
@@ -474,7 +482,7 @@ let editCity = async (data) => {
             if (!data.id) {
                 resolve({
                     errorCode: 2,
-                    messageCode: "Missing input"
+                    messageCode: "Vui lòng điền đủ thông tin"
                 })
             }
             let city = await db.City.findOne({
@@ -489,7 +497,7 @@ let editCity = async (data) => {
                 await city.save();
                 resolve({
                     errorCode: 0,
-                    messageCode: 'Update successfully'
+                    messageCode: 'Cập nhật thành công'
                 })
 
 
@@ -563,7 +571,7 @@ let editComment = async (data) => {
             if (!data.id) {
                 resolve({
                     errorCode: 2,
-                    messageCode: "Missing input"
+                    messageCode: "Vui lòng điền đủ thông tin"
                 })
             }
             let comment = await db.Comment.findOne({
@@ -578,7 +586,7 @@ let editComment = async (data) => {
                 await comment.save();
                 resolve({
                     errorCode: 0,
-                    messageCode: 'Update successfully'
+                    messageCode: 'Cập nhật thành công'
                 })
 
 
@@ -599,7 +607,7 @@ let handleDeleteComment = async (id) => {
             if (!comment) {
                 resolve({
                     errorCode: 2,
-                    messageCode: 'Comment not found'
+                    messageCode: 'Không tìm thấy bình luận'
                 })
             }
 
@@ -608,7 +616,7 @@ let handleDeleteComment = async (id) => {
             });
             resolve({
                 errorCode: 0,
-                messageCode: 'The comment is deleted'
+                messageCode: 'Đã xóa bình luận thành công'
             })
         }
 
@@ -798,7 +806,7 @@ let handleDeleteBookingById = (idInput) => {
             if (!booking) {
                 resolve({
                     errorCode: 0,
-                    errorMessage: 'Booking not found'
+                    errorMessage: 'Không tìm thấy lịch hẹn'
                 })
             }
             else {
@@ -808,7 +816,7 @@ let handleDeleteBookingById = (idInput) => {
                 });
                 resolve({
                     errorCode: 0,
-                    messageCode: 'The booking is deleted'
+                    messageCode: 'Lịch hẹn đã bị xóa'
                 })
 
             }
@@ -821,12 +829,13 @@ let handleDeleteBookingById = (idInput) => {
     )
 }
 let handleEditBookingById = async (data) => {
+    console.log(data);
     return new Promise(async (resolve, reject) => {
         try {
             if (!data.id) {
                 resolve({
                     errorCode: 2,
-                    messageCode: "Missing input"
+                    messageCode: "Vui lòng điền đủ thông tin"
                 })
             }
             let booking = await db.Booking.findOne({
@@ -835,18 +844,69 @@ let handleEditBookingById = async (data) => {
 
             })
             if (booking) {
-                booking.time = data.time;
-                booking.date = data.date;
-                booking.idUser = data.idUser;
-                booking.idHouse = data.idHouse;
-                booking.description = data.desc;
-                booking.status = data.status;
+
+                if (booking.time === data.time && booking.date === data.date) {
+                    booking.idUser = data.idUser;
+                    booking.idHouse = data.idHouse;
+                    booking.description = data.desc;
+                    booking.status = data.status;
+                    await booking.save();
+                }
+                else {
+                    booking.time = data.time;
+                    booking.date = data.date;
+                    booking.idUser = data.idUser;
+                    booking.idHouse = data.idHouse;
+                    booking.description = data.desc;
+                    booking.status = "Đã Dời Lịch Hẹn";
+                    await booking.save();
+                    let house = await db.House.findOne({
+                        where: {
+                            id: data.idHouse
+                        },
+                        include: [
+
+                            { model: db.User, as: 'User', attributes: ['firstName', 'lastName', 'address', 'tel'] },
+                        ],
+                        raw: true,
+                        nest: true
+
+                    });
+                    let nameOwner = " ";
+                    let tel = " "
+                    if (house.User) {
+                        nameOwner = house.User.firstName + " " + house.User.lastName;
+                        tel = house.User.tel;
+                    }
+                    let users = await db.User.findOne({
+                        where: {
+                            email: data.email
+                        },
+                        attributes: {
+                            exclude: ['password', 'image']
+                        },
+
+                    })
+                    let dateBooking = moment(new Date(parseInt(data.date))).format('DD/MM/YYYY')
+                    await sendSimpleEmailChangeTime({
+                        username: users.firstName + " " + users.lastName,
+                        tel: tel,
+                        recieverEmail: data.email,
+                        name: house.name ? house.name : ' ',
+                        address: house.address ? house.address : '',
+                        time: data.time + " " + dateBooking,
+                        ownerName: nameOwner ? nameOwner : '',
+                        linkRedirect: buildUrlEmail(data.idHouse, booking.token),
+                        linkRedirectCancel: buildUrlEmailCancel(data.idHouse, booking.token)
+                    })
+                }
 
 
-                await booking.save();
+
+
                 resolve({
                     errorCode: 0,
-                    messageCode: 'Update successfully'
+                    messageCode: 'Cập nhật thành công'
                 })
 
 

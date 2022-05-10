@@ -9,7 +9,7 @@ let postBookingApointment = async (req, res) => {
     if (!data) {
         return res.status(200).json({
             errorCode: 1,
-            messageCode: " Missing input",
+            messageCode: "Vui lòng điền đủ thông tin",
             users: []
         })
     }
@@ -29,7 +29,7 @@ let postBookingApointmentWithoutPass = async (req, res) => {
     if (!data) {
         return res.status(200).json({
             errorCode: 1,
-            messageCode: " Missing input",
+            messageCode: "Vui lòng điền đủ thông tin",
             users: []
         })
     }
@@ -48,7 +48,7 @@ let commentPost = async (req, res) => {
     if (!data) {
         return res.status(200).json({
             errorCode: 1,
-            messageCode: " Missing input",
+            messageCode: "Vui lòng điền đủ thông tin",
 
         })
     }
@@ -67,7 +67,7 @@ let getAllBookingApointment = async (req, res) => {
     if (!data) {
         return res.status(200).json({
             errorCode: 1,
-            messageCode: " Missing input",
+            messageCode: "Vui lòng điền đủ thông tin",
 
         })
     }

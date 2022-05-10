@@ -28,7 +28,7 @@ let postBookingApointment = (data) => {
             if (!data.email || !data.idHouse || !data.time || !data.date || !data.password) {
                 resolve({
                     errorCode: 0,
-                    errorMessage: "Missing parameter"
+                    errorMessage: "Vui lòng điền đủ thông tin"
                 });
             }
 
@@ -68,7 +68,7 @@ let postBookingApointment = (data) => {
                                 date: data.date,
                                 description: data.desc,
                                 token: token,
-                                status: 'Đang được xử lý'
+                                status: 'Đang Được Xử Lý'
 
                             }
 
@@ -87,14 +87,14 @@ let postBookingApointment = (data) => {
 
                         resolve({
                             errorCode: 0,
-                            errorMessage: "Create success",
+                            errorMessage: "Tạo thành công",
                             users: users
                         })
 
                     }
                     resolve({
                         errorCode: -1,
-                        errorMessage: 'Wrong password',
+                        errorMessage: 'Sai mật khẩu',
                         users: []
                     })
 
@@ -117,7 +117,7 @@ let postBookingApointmentWithoutPass = (data) => {
             if (!data.email || !data.idHouse || !data.time || !data.date) {
                 resolve({
                     errorCode: 0,
-                    errorMessage: "Missing parameter"
+                    errorMessage: "Vui lòng điền đủ thông tin"
                 });
             }
 
@@ -154,7 +154,7 @@ let postBookingApointmentWithoutPass = (data) => {
                             date: data.date,
                             description: data.desc,
                             token: token,
-                            status: 'Đang được xử lý'
+                            status: 'Đang Được Xử Lý'
 
                         }
 
@@ -162,6 +162,7 @@ let postBookingApointmentWithoutPass = (data) => {
                     })
                     let dateBooking = moment(new Date(parseInt(data.date))).format('DD/MM/YYYY')
                     await sendSimpleEmail({
+                        username: users.firstName + " " + users.lastName,
                         recieverEmail: data.email,
                         name: data.name ? data.name : ' ',
                         address: data.address ? data.address : '',
@@ -173,7 +174,7 @@ let postBookingApointmentWithoutPass = (data) => {
 
                     resolve({
                         errorCode: 0,
-                        errorMessage: "Create success",
+                        errorMessage: "Tạo thành công",
                         users: users
                     })
 
@@ -216,7 +217,7 @@ let commentPost = (data) => {
             if (!data.userId || !data.content || !data.houseId) {
                 resolve({
                     errorCode: 0,
-                    errorMessage: "Missing parameter"
+                    errorMessage: "Vui lòng điền đủ thông tin"
                 });
             }
             else {
@@ -230,7 +231,7 @@ let commentPost = (data) => {
 
                 resolve({
                     errorCode: 0,
-                    errorMessage: "Create success",
+                    errorMessage: "Tạo thành công",
 
                 })
 
@@ -251,7 +252,7 @@ let getAllBookingApointment = (data) => {
             if (!data) {
                 resolve({
                     errorCode: 0,
-                    errorMessage: "Missing parameter"
+                    errorMessage: "Vui lòng điền đủ thông tin"
                 });
             }
             else {
@@ -310,7 +311,7 @@ let postVerifyBooking = (data) => {
             if (!data.token || !data.idBooking) {
                 resolve({
                     errorCode: 0,
-                    errorMessage: "Missing parameter"
+                    errorMessage: "Vui lòng điền đủ thông tin"
                 });
             }
             else {
@@ -319,7 +320,10 @@ let postVerifyBooking = (data) => {
                     where: {
                         idHouse: parseInt(data.idBooking),
                         token: data.token,
-
+                        [Op.or]: {
+                            status: "Đang Chờ Xử Lý",
+                            status: "Đã Dời Lịch Hẹn",
+                        }
                     },
                     raw: false
                 });
@@ -329,7 +333,7 @@ let postVerifyBooking = (data) => {
 
                     resolve({
                         errorCode: 0,
-                        errorMessage: 'Update success'
+                        errorMessage: 'Cập nhật thành công'
                     });
 
                 }
@@ -353,7 +357,7 @@ let postVerifyBookingFromOwner = (data) => {
             if (!data.token || !data.idBooking) {
                 resolve({
                     errorCode: 0,
-                    errorMessage: "Missing parameter"
+                    errorMessage: "Vui lòng điền đủ thông tin"
                 });
             }
             else {
@@ -362,18 +366,24 @@ let postVerifyBookingFromOwner = (data) => {
                     where: {
                         idHouse: parseInt(data.idBooking),
                         token: data.token,
-                        status: "Đã xác nhận"
+                        [Op.or]: {
+                            status: "Đã Xác Nhận",
+                            status: "Đã Dời Lịch Hẹn"
+
+
+                        }
+
 
                     },
                     raw: false
                 });
                 if (aBooking) {
-                    aBooking.status = "Đã Đồng Ý Hẹn";
+                    aBooking.status = "Đã Gặp";
                     await aBooking.save();
 
                     resolve({
                         errorCode: 0,
-                        errorMessage: 'Update success'
+                        errorMessage: 'Cập nhật thành công'
                     });
 
                 }
@@ -396,7 +406,7 @@ let postCancelVerifyBooking = (data) => {
             if (!data.token || !data.idBooking) {
                 resolve({
                     errorCode: 0,
-                    errorMessage: "Missing parameter"
+                    errorMessage: "Vui lòng điền đủ thông tin"
                 });
             }
             else {
@@ -406,7 +416,7 @@ let postCancelVerifyBooking = (data) => {
                         idHouse: parseInt(data.idBooking),
                         token: data.token,
                         [Op.or]: {
-                            status: "Đã Đồng Ý Hẹn",
+                            status: "Đã Gặp",
                             status: "Đã Xác Nhận"
                         }
 
@@ -420,7 +430,7 @@ let postCancelVerifyBooking = (data) => {
 
                     resolve({
                         errorCode: 0,
-                        errorMessage: 'Update success'
+                        errorMessage: 'Cập nhật thành công'
                     });
 
                 }
