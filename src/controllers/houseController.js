@@ -10,7 +10,7 @@ let getListLatestHouse = async (req, res) => {
         console.log(error);
         return res.status(200).json({
             errorCode: -1,
-            message: 'Error from Server!!!'
+            message: 'Lỗi của máy chủ'
 
         })
 
@@ -27,7 +27,7 @@ let getListHouse = async (req, res) => {
         console.log(error);
         return res.status(200).json({
             errorCode: -1,
-            message: 'Error from Server!!!'
+            message: 'Lỗi của máy chủ'
 
         })
 
@@ -58,7 +58,7 @@ let handleDeleteHouse = async (req, res) => {
     if (!req.body.id) {
         return res.status(200).json({
             errorCode: 1,
-            messageCode: " House not found"
+            messageCode: " Không tìm thấy kết quả"
         })
 
     }
@@ -80,7 +80,7 @@ let getFilterHouse = async (req, res) => {
         console.log(error);
         return res.status(200).json({
             errorCode: -1,
-            message: 'Error from Server!!!'
+            message: 'Lỗi của máy chủ'
 
         })
 
@@ -94,7 +94,7 @@ let getFilterHouseFromHome = async (req, res) => {
         console.log(error);
         return res.status(200).json({
             errorCode: -1,
-            message: 'Error from Server!!!'
+            message: 'Lỗi của máy chủ'
 
         })
 
@@ -110,7 +110,7 @@ let getListHouseByCity = async (req, res) => {
         console.log(error);
         return res.status(200).json({
             errorCode: -1,
-            message: 'Error from Server!!!'
+            message: 'Lỗi của máy chủ'
 
         })
 
@@ -127,7 +127,7 @@ let getAllTypeHouseById = async (req, res) => {
         console.log(error);
         return res.status(200).json({
             errorCode: -1,
-            message: 'Error from Server!!!'
+            message: 'Lỗi của máy chủ'
 
         })
 
@@ -148,7 +148,7 @@ let getListHouseMobile = async (req, res) => {
         console.log(error);
         return res.status(200).json({
             errorCode: -1,
-            message: 'Error from Server!!!'
+            message: 'Lỗi của máy chủ'
 
         })
 
@@ -162,7 +162,7 @@ let getFilterHouseFromHomeMobile = async (req, res) => {
         console.log(error);
         return res.status(200).json({
             errorCode: -1,
-            message: 'Error from Server!!!'
+            message: 'Lỗi của máy chủ'
 
         })
 

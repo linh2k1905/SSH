@@ -87,7 +87,7 @@ let getScheduleOwner = (id, date) => {
 
             if (!id || !date) {
                 resolve({
-                    errorMessage: "Missing parameters",
+                    errorMessage: "Vui lòng điền đủ thông tin",
                     errorCode: 0
 
                 })

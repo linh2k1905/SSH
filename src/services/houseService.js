@@ -82,7 +82,7 @@ let editHouse = async (data) => {
             if (!data.id) {
                 resolve({
                     errorCode: 2,
-                    messageCode: "Missing input"
+                    messageCode: "Vui lòng điền đủ thông tin"
                 })
             }
             let house = await db.House.findOne({
@@ -104,7 +104,7 @@ let editHouse = async (data) => {
             await house.save();
             resolve({
                 errorCode: 0,
-                messageCode: 'Update successfully'
+                messageCode: 'Cập nhật thông tin thành công'
             })
 
 
@@ -174,7 +174,7 @@ let getBlockUserHasPostUnvailable = (data) => {
                 await houseblock.save();
                 resolve({
                     errorCode: 0,
-                    messageCode: 'Block user successfully'
+                    messageCode: 'Khóa người dùng thành công'
                 });
             }
 
@@ -205,7 +205,7 @@ let deleteHouse = async (id) => {
             if (!house) {
                 resolve({
                     errorCode: 2,
-                    messageCode: 'Post not found'
+                    messageCode: 'Không tìm thấy bài đăng hoặc bị xóa'
                 })
             }
 
@@ -214,7 +214,7 @@ let deleteHouse = async (id) => {
             });
             resolve({
                 errorCode: 0,
-                messageCode: 'The post is deleted'
+                messageCode: 'Bài đăng bị xóa'
             })
         }
 
