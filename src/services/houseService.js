@@ -99,6 +99,7 @@ let editHouse = async (data) => {
                 house.lang = data.lang
                 house.descriptionEn = data.descEn
                 house.descriptionVi = data.descVi
+                house.image = data.image
 
             }
             await house.save();

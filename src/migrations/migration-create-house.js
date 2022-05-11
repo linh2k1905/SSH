@@ -13,14 +13,16 @@ module.exports = {
         type: Sequelize.STRING
       },
       idUser: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
       },
       idCity: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
       },
       idTypeHouse: {
         type: Sequelize.INTEGER,
-        allowNull: true,
+        allowNull: false,
       }
       ,
       address: {
