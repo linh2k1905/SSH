@@ -374,12 +374,58 @@ let getListHouseByCity = (data) => {
 
                     },
                     { model: db.City },
-                    { model: db.User, as: 'User', attributes: ['firstName', 'lastName', 'address', 'tel', 'image', 'email', 'id'] },
+                    { model: db.User, as: 'User', attributes: ['firstName', 'lastName', 'address', 'tel', 'email', 'id'] },
 
                 ],
                 raw: true,
                 nest: true
             });
+            resolve({
+                errorCode: 0,
+                data: house
+            });
+
+        } catch (error) {
+            reject({
+                errorCode: 1,
+                messageCode: ' Loi' + error
+            })
+        }
+
+
+    })
+}
+
+let getListHouseByCityFromMobile = (data) => {
+    console.log(data);
+    return new Promise(async (resolve, reject) => {
+        try {
+            let house = await db.House.findAll({
+                where: {
+                    idCity: parseInt(data.idCity),
+                    status: STATUS.STATUS_OK,
+                },
+                include: [
+                    {
+                        model: db.HouseType,
+
+                    },
+                    { model: db.City },
+                    { model: db.User, as: 'User', attributes: ['firstName', 'lastName', 'address', 'tel', 'email', 'id'] },
+
+                ],
+                raw: true,
+                nest: true
+            });
+
+            if (house) {
+                house.map((item, index) => {
+                    house[index].image = Buffer.from(item.image, 'base64').toString('binary');
+
+                })
+
+            }
+
             resolve({
                 errorCode: 0,
                 data: house
@@ -563,5 +609,6 @@ module.exports = {
     getAllTypeHouseById: getAllTypeHouseById,
     getFilterHouseFromHomeMobile: getFilterHouseFromHomeMobile,
     getListHouseByCity: getListHouseByCity,
-    getBlockUserHasPostUnvailable: getBlockUserHasPostUnvailable
+    getBlockUserHasPostUnvailable: getBlockUserHasPostUnvailable,
+    getListHouseByCityFromMobile: getListHouseByCityFromMobile
 }
