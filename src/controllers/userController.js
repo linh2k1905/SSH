@@ -6,7 +6,7 @@ let handleLogin = async (req, res) => {
     if (!email || !password) {
         return res.status(500).json({
             errorCode: 1,
-            messageCode: 'not empty input',
+            messageCode: 'Không được để trống',
 
 
         })
@@ -305,7 +305,7 @@ let handleLoginFromMobile = async (req, res) => {
     if (!email || !password) {
         return res.status(500).json({
             errorCode: 1,
-            messageCode: 'not empty input',
+            messageCode: 'Không để trống',
 
 
         })
