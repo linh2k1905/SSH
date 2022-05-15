@@ -406,6 +406,40 @@ let editUser = async (data) => {
         }
     })
 }
+let handleEditUserPassword = async (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!data.id) {
+                resolve({
+                    errorCode: 2,
+                    messageCode: "Vui lòng đăng nhập"
+                })
+            }
+
+            let user = await db.User.findOne({
+                where: { id: data.id },
+                raw: false
+
+            })
+            let rlt = await bcrypt.compareSync(data.password, user.password);
+
+
+            if (user && rlt) {
+                let hashUserPasswordFromBcrypt = await hashUserPassword(data.newpassword);
+                user.password = hashUserPasswordFromBcrypt;
+                await user.save();
+                resolve({
+                    errorCode: 0,
+                    messageCode: 'Cập nhật thành công'
+                })
+
+
+            }
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
 let getRoleUser = () => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -1027,5 +1061,6 @@ module.exports = {
     getHouseByIdUser: getHouseByIdUser,
     getHouseByMailUser: getHouseByMailUser,
     getAllBookingByUserId: getAllBookingByUserId,
-    handleUserLoginFromMobile: handleUserLoginFromMobile
+    handleUserLoginFromMobile: handleUserLoginFromMobile,
+    handleEditUserPassword: handleEditUserPassword
 }

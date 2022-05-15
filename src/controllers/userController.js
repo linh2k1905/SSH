@@ -64,6 +64,13 @@ let handleEditUser = async (req, res) => {
 
 
 }
+let handleEditUserPassword = async (req, res) => {
+
+    let message = await userService.handleEditUserPassword(req.body);
+    return res.status(200).json(message)
+
+
+}
 let handleGetRole = async (req, res) => {
     let data = await userService.getRoleUser();
     return res.status(200).json(data);
@@ -344,7 +351,8 @@ module.exports = {
     getHouseByIdUser: getHouseByIdUser,
     getHouseByMailUser: getHouseByMailUser,
     getAllBookingByUserId: getAllBookingByUserId,
-    handleLoginFromMobile: handleLoginFromMobile
+    handleLoginFromMobile: handleLoginFromMobile,
+    handleEditUserPassword: handleEditUserPassword
 
 
 }
