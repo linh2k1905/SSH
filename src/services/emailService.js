@@ -27,7 +27,6 @@ let sendSimpleEmail = async (datasend) => {
         <p>Địa chỉ nhà trọ ${datasend.address}</p>
         <p>Chủ nhà trọ :${datasend.ownerName}</p>
         <p>Thời gian: ${datasend.time}</p>
-        <p>Xin chào ${datasend.tel}!</p>
         <a href="${datasend.linkRedirect}">Nhấn để xác nhận</a>
         <a href="${datasend.linkRedirectCancel}">Nhấn để hủy hẹn</a>
         
