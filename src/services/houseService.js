@@ -100,10 +100,8 @@ let editHouse = async (data) => {
                 house.descriptionEn = data.descEn
                 house.descriptionVi = data.descVi
                 if (data.image) {
-                    house.image = data.image
+                    house.image = Buffer.from(data.image, 'base64').toString('binary');
                 }
-                else house.image = house.image
-
 
             }
             await house.save();
