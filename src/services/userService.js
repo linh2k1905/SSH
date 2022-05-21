@@ -59,7 +59,6 @@ let handleUserLogin = (email, password) => {
 }
 
 let handleUserLoginFromMobile = (email, password) => {
-    console.log(typeof email, typeof password);
     return new Promise(async (resolve, reject) => {
         try {
 
@@ -74,7 +73,6 @@ let handleUserLoginFromMobile = (email, password) => {
                     },
                     raw: false
                 });
-                console.log(user);
                 if (user) {
                     if (user.image)
                         user.image = Buffer.from(user.image, 'base64').toString('binary');
@@ -192,7 +190,6 @@ let getAllUser = (id) => {
 let createNewUser = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            console.log(data);
             let check = await checkEmailUser(data.email)
             if (check) {
                 resolve({
@@ -879,7 +876,7 @@ let handleDeleteBookingById = (idInput) => {
     )
 }
 let handleEditBookingById = async (data) => {
-    console.log(data);
+
     return new Promise(async (resolve, reject) => {
         try {
             if (!data.id) {
