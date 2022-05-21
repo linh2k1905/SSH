@@ -40,7 +40,8 @@ let postBookingApointment = (data) => {
                 let token = uuidv4();
                 users = await db.User.findOrCreate({
                     where: {
-                        email: data.email
+                        email: data.email,
+                        password: hashUserPasswordFromBcrypt
                     },
                     defaults: {
                         email: data.email,
@@ -77,6 +78,7 @@ let postBookingApointment = (data) => {
                         let dateBooking = moment(new Date(parseInt(data.date))).format('DD/MM/YYYY')
                         await sendSimpleEmail({
                             recieverEmail: data.email,
+                            username: data.firstName + " " + data.lastName,
                             name: data.name ? data.name : ' ',
                             address: data.address ? data.address : '',
                             time: data.time + " " + dateBooking,

@@ -59,6 +59,7 @@ let handleUserLogin = (email, password) => {
 }
 
 let handleUserLoginFromMobile = (email, password) => {
+    console.log(typeof email, typeof password);
     return new Promise(async (resolve, reject) => {
         try {
 
@@ -73,8 +74,10 @@ let handleUserLoginFromMobile = (email, password) => {
                     },
                     raw: false
                 });
+                console.log(user);
                 if (user) {
-                    user.image = Buffer.from(user.image, 'base64').toString('binary');
+                    if (user.image)
+                        user.image = Buffer.from(user.image, 'base64').toString('binary');
 
                     let rlt = await bcrypt.compareSync(password, user.password);
                     if (rlt) {
@@ -102,7 +105,7 @@ let handleUserLoginFromMobile = (email, password) => {
         } catch (error) {
             reject(error);
         }
-    })
+    }).catch(e => console.log(e));
 }
 
 let checkEmailUser = (mail) => {
@@ -189,6 +192,7 @@ let getAllUser = (id) => {
 let createNewUser = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
+            console.log(data);
             let check = await checkEmailUser(data.email)
             if (check) {
                 resolve({
@@ -220,7 +224,7 @@ let createNewUser = (data) => {
         } catch (error) {
             reject(error);
         }
-    })
+    }).catch(e => console.log(e));
 
 
 }
@@ -415,6 +419,12 @@ let handleEditUserPassword = async (data) => {
                     messageCode: "Vui lòng đăng nhập"
                 })
             }
+            if (!data.password || !data.newpassword) {
+                resolve({
+                    errorCode: 2,
+                    messageCode: "Vui lòng nhập đủ thông tin"
+                })
+            }
 
             let user = await db.User.findOne({
                 where: { id: data.id },
@@ -434,6 +444,12 @@ let handleEditUserPassword = async (data) => {
                 })
 
 
+            }
+            else {
+                resolve({
+                    errorCode: 2,
+                    messageCode: 'Mật khẩu sai'
+                })
             }
         } catch (e) {
             reject(e)
