@@ -15,7 +15,7 @@ let sendSimpleEmail = async (datasend) => {
         },
     });
     let info = await transporter.sendMail({
-        from: '"Xác nhận lịch hẹn trên web Phongtro123" <linhb1809144@ctu.edu.vn>', // sender address
+        from: '"Xác nhận lịch hẹn trên web TimPhongtro123" <linhb1809144@ctu.edu.vn>', // sender address
         to: datasend.recieverEmail, // list of receivers
         subject: "Thông tin đặt lịch hẹn với chủ phòng trọ ", // Subject line
         html:
@@ -47,9 +47,9 @@ let sendSimpleEmailChangeTime = async (datasend) => {
         },
     });
     let info = await transporter.sendMail({
-        from: '"Thông báo đổi lịch hẹn trên web Phongtro123" <linhb1809144@ctu.edu.vn>', // sender address
+        from: '"Thông báo đổi lịch hẹn trên web TimPhongtro123" <linhb1809144@ctu.edu.vn>', // sender address
         to: datasend.recieverEmail, // list of receivers
-        subject: "Thông tin đặt lịch hẹn với chủ phòng trọ ", // Subject line
+        subject: "Dời lại lịch hẹn với chủ phòng trọ ", // Subject line
         html:
 
             `

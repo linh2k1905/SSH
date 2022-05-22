@@ -100,7 +100,7 @@ let postBookingApointment = (data) => {
                 else
                     resolve({
                         errorCode: -1,
-                        errorMessage: 'Email này chưa đăng ký tài khoản',
+                        errorMessage: 'Sai địa chỉ email',
                         users: []
                     })
 
