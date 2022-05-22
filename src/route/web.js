@@ -71,6 +71,7 @@ let initWebRoute = (app) => {
     router.put('/api/edit-comment-by-id', userController.handleEditComment);
     router.delete('/api/delete-comment', userController.handleDeleteComment);
     router.get('/api/get-all-comment-by-houseId', userController.getAllCommentByIdHouse);
+    router.get('/api/get-all-comment-by-houseId-and-userId', userController.getAllCommentByIdHouseAndUserId);
     router.get('/api/get-all-booking-by-user-id', userController.getAllBookingByUserId);
     router.put('/api/get-block-user-has-post-unvailable', houseController.getBlockUserHasPostUnvailable);
     return app.use(router)

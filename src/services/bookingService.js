@@ -36,26 +36,21 @@ let postBookingApointment = (data) => {
 
 
 
-                let hashUserPasswordFromBcrypt = await hashUserPassword(data.password);
                 let token = uuidv4();
-                users = await db.User.findOrCreate({
+
+
+                users = await db.User.findOne({
                     where: {
                         email: data.email,
-                        password: hashUserPasswordFromBcrypt
-                    },
-                    defaults: {
-                        email: data.email,
-                        roleId: USER_ROLE.USER,
-                        tel: data.tel,
-                        password: hashUserPasswordFromBcrypt,
                     }
+
                 })
-                if (users && users[0]) {
-                    let rlt = await bcrypt.compareSync(data.password, users[0].password);
-                    if (rlt) {
+                if (users) {
+                    let cp = bcrypt.compareSync(data.password, users.password);
+                    if (cp) {
                         await db.Booking.findOrCreate({
                             where: {
-                                idUser: users[0].id,
+                                idUser: users.id,
                                 idHouse: data.idHouse,
                                 time: data.time,
                                 date: data.date,
@@ -63,7 +58,7 @@ let postBookingApointment = (data) => {
 
                             },
                             defaults: {
-                                idUser: users[0].id,
+                                idUser: users.id,
                                 idHouse: data.idHouse,
                                 time: data.time,
                                 date: data.date,
@@ -75,35 +70,45 @@ let postBookingApointment = (data) => {
 
 
                         })
-                        let dateBooking = moment(new Date(parseInt(data.date))).format('DD/MM/YYYY')
-                        await sendSimpleEmail({
-                            recieverEmail: data.email,
-                            username: data.firstName + " " + data.lastName,
-                            name: data.name ? data.name : ' ',
-                            address: data.address ? data.address : '',
-                            time: data.time + " " + dateBooking,
-                            ownerName: data.nameOwner ? data.nameOwner : '',
-                            linkRedirect: buildUrlEmail(data.idHouse, token),
-                            linkRedirectCancel: buildUrlEmailCancel(data.idHouse, token)
-                        })
-
-                        resolve({
-                            errorCode: 0,
-                            errorMessage: "Tạo thành công",
-                            users: users
-                        })
-
                     }
+                    else {
+                        resolve({
+                            errorCode: -1,
+                            errorMessage: 'Mật khẩu không đúng',
+                            users: []
+                        })
+                    }
+                    let dateBooking = moment(new Date(parseInt(data.date))).format('DD/MM/YYYY')
+                    await sendSimpleEmail({
+                        recieverEmail: data.email,
+                        username: data.firstName + " " + data.lastName,
+                        name: data.name ? data.name : ' ',
+                        address: data.address ? data.address : '',
+                        time: data.time + " " + dateBooking,
+                        ownerName: data.nameOwner ? data.nameOwner : '',
+                        linkRedirect: buildUrlEmail(data.idHouse, token),
+                        linkRedirectCancel: buildUrlEmailCancel(data.idHouse, token)
+                    })
+
                     resolve({
-                        errorCode: -1,
-                        errorMessage: 'Sai mật khẩu',
-                        users: []
+                        errorCode: 0,
+                        errorMessage: "Tạo thành công",
+                        users: users
                     })
 
                 }
+                else
+                    resolve({
+                        errorCode: -1,
+                        errorMessage: 'Email này chưa đăng ký tài khoản',
+                        users: []
+                    })
 
 
             }
+
+
+
 
         } catch (error) {
             reject(error)

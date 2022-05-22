@@ -268,6 +268,24 @@ let getAllCommentByIdHouse = async (req, res) => {
     })
 
 }
+let getAllCommentByIdHouseAndUserId = async (req, res) => {
+
+
+    if (!req.query.idHouse) {
+        return res.status(200).json({
+            errorCode: 1,
+            messageCode: " Missing input",
+            comments: []
+        })
+    }
+    let comments = await userService.getAllCommentByIdHouseAndUserId(req.query);
+    return res.status(200).json({
+        errorCode: 0,
+        errMessage: "ok",
+        comments: comments
+    })
+
+}
 let getAllComment = async (req, res) => {
 
 
@@ -352,7 +370,8 @@ module.exports = {
     getHouseByMailUser: getHouseByMailUser,
     getAllBookingByUserId: getAllBookingByUserId,
     handleLoginFromMobile: handleLoginFromMobile,
-    handleEditUserPassword: handleEditUserPassword
+    handleEditUserPassword: handleEditUserPassword,
+    getAllCommentByIdHouseAndUserId: getAllCommentByIdHouseAndUserId
 
 
 }

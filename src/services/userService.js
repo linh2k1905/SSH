@@ -757,6 +757,47 @@ let getAllCommentByIdHouse = (idHouse) => {
                     },
                     include: [
                         { model: db.User, as: 'User', attributes: ['firstName', 'lastName', 'address', 'tel', 'image'] },
+                        { model: db.House, attributes: ['name'] },
+
+                    ],
+                    raw: true,
+                    nest: true
+
+                })
+
+            }
+
+
+            resolve(comments)
+
+
+        } catch (error) {
+            reject(error)
+        }
+    }
+    )
+}
+let getAllCommentByIdHouseAndUserId = (data) => {
+
+    return new Promise(async (resolve, reject) => {
+        try {
+            let comments = '';
+
+
+            if (data) {
+                comments = await db.Comment.findAll({
+                    where: {
+                        houseId: data.idHouse,
+                    },
+                    include: [
+                        {
+                            model: db.User,
+                            where: {
+                                id: data.idUser
+                            },
+                            as: 'User', attributes: ['firstName', 'lastName', 'address', 'tel', 'image']
+                        },
+                        { model: db.House, attributes: ['name'] },
 
                     ],
                     raw: true,
@@ -1067,6 +1108,7 @@ module.exports = {
     handleGetAllUsersByTypeUser: handleGetAllUsersByTypeUser,
     handleGetInfoBooking: handleGetInfoBooking,
     getAllCommentByIdHouse: getAllCommentByIdHouse,
+    getAllCommentByIdHouseAndUserId: getAllCommentByIdHouseAndUserId,
     getAllComment: getAllComment,
     handleDeleteBookingById: handleDeleteBookingById,
     handleEditBookingById: handleEditBookingById,
