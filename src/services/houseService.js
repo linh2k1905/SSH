@@ -500,6 +500,7 @@ let getAllHomeMobile = () => {
                     status: STATUS.STATUS_OK,
                 },
                 order: [['createdAt', 'ASC']],
+                limit: 5,
                 include: [
                     { model: db.HouseType },
                     { model: db.City },
