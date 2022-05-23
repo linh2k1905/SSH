@@ -499,7 +499,7 @@ let getAllHomeMobile = () => {
                 where: {
                     status: STATUS.STATUS_OK,
                 },
-                order: [['createdAt', 'ASC']],
+                order: [['id', 'DESC']],
                 limit: 5,
                 include: [
                     { model: db.HouseType },

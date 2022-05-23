@@ -114,7 +114,7 @@ let postBookingApointment = (data) => {
             reject(error)
         }
     }
-    )
+    ).catch(e => console.log(e))
 }
 let postBookingApointmentWithoutPass = (data) => {
 
